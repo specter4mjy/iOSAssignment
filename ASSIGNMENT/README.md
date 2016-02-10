@@ -1,5 +1,5 @@
-# Assignment 1: Hello UCD
+# Assignment
 
 * Name: Junyang Ma
-* Student_Number: 15203095
+* Student Number: 15203095
 * Email: specter4mjy@gmail.com or junyang.ma@ucdconnect.ie
