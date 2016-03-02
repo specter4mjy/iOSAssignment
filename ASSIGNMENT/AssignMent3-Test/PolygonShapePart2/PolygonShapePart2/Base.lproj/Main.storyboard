@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="6Ga-ZB-dZN">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="bmU-Si-BSz">
+            <objects>
+                <viewController id="6Ga-ZB-dZN" customClass="ViewController" customModule="PolygonShapePart2" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="bJs-Ky-b3a"/>
+                        <viewControllerLayoutGuide type="bottom" id="63h-bN-aMP"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="IB7-PS-vlj">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WzE-tL-19P">
+                                <rect key="frame" x="521" y="59.5" width="59" height="30"/>
+                                <state key="normal" title="Increase"/>
+                                <connections>
+                                    <action selector="increasePrese:" destination="6Ga-ZB-dZN" eventType="touchUpInside" id="GUR-Nd-GOd"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dvM-r4-Djc">
+                                <rect key="frame" x="20" y="59.5" width="65" height="30"/>
+                                <state key="normal" title="Decrease"/>
+                                <connections>
+                                    <action selector="decreasePress:" destination="6Ga-ZB-dZN" eventType="touchUpInside" id="PVf-qE-KMZ"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of Sides: 3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w4V-7g-Cfa">
+                                <rect key="frame" x="20" y="20" width="147.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="nsg-Vg-R5c" customClass="PolygonView" customModule="PolygonShapePart2" customModuleProvider="target">
+                                <rect key="frame" x="20" y="89.5" width="560" height="510.5"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="KUf-uh-sDJ" appends="YES" id="RxM-a4-YBC"/>
+                                    <outletCollection property="gestureRecognizers" destination="tk3-Qh-yXQ" appends="YES" id="VIf-Rh-3da"/>
+                                </connections>
+                            </view>
+                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" wraps="YES" value="3" minimumValue="3" maximumValue="12" translatesAutoresizingMaskIntoConstraints="NO" id="RAJ-EV-muk">
+                                <rect key="frame" x="253" y="52" width="94" height="29"/>
+                                <connections>
+                                    <action selector="stepperPress:" destination="6Ga-ZB-dZN" eventType="valueChanged" id="BPl-hu-twS"/>
+                                </connections>
+                            </stepper>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="63h-bN-aMP" firstAttribute="top" secondItem="nsg-Vg-R5c" secondAttribute="bottom" id="1QR-1R-Rgq"/>
+                            <constraint firstItem="RAJ-EV-muk" firstAttribute="centerX" secondItem="IB7-PS-vlj" secondAttribute="centerX" id="1lT-kq-x1m"/>
+                            <constraint firstItem="WzE-tL-19P" firstAttribute="baseline" secondItem="dvM-r4-Djc" secondAttribute="baseline" id="2Q2-zW-W2g"/>
+                            <constraint firstItem="w4V-7g-Cfa" firstAttribute="top" secondItem="bJs-Ky-b3a" secondAttribute="bottom" id="3Lk-KL-gLC"/>
+                            <constraint firstItem="WzE-tL-19P" firstAttribute="top" secondItem="dvM-r4-Djc" secondAttribute="top" id="GsP-ry-aiO"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="dvM-r4-Djc" secondAttribute="leading" id="HYE-9F-Y6F"/>
+                            <constraint firstItem="nsg-Vg-R5c" firstAttribute="leading" secondItem="IB7-PS-vlj" secondAttribute="leadingMargin" id="KrT-U7-9pX"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="nsg-Vg-R5c" secondAttribute="trailing" id="VPR-vX-3on"/>
+                            <constraint firstItem="dvM-r4-Djc" firstAttribute="top" secondItem="w4V-7g-Cfa" secondAttribute="bottom" constant="19" id="iTS-C6-CgO"/>
+                            <constraint firstItem="nsg-Vg-R5c" firstAttribute="top" secondItem="RAJ-EV-muk" secondAttribute="bottom" constant="8" symbolic="YES" id="maT-yi-W80"/>
+                            <constraint firstItem="nsg-Vg-R5c" firstAttribute="top" secondItem="dvM-r4-Djc" secondAttribute="bottom" id="oq7-QF-nmX"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="WzE-tL-19P" secondAttribute="trailing" id="qcm-uy-ogR"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="w4V-7g-Cfa" secondAttribute="leading" id="wsd-XP-sbz"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="GsP-ry-aiO"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="NumberLabel" destination="w4V-7g-Cfa" id="wwS-od-VAq"/>
+                        <outlet property="decreaseButton" destination="dvM-r4-Djc" id="zuW-dH-vnq"/>
+                        <outlet property="increaseButton" destination="WzE-tL-19P" id="k5q-5q-TWu"/>
+                        <outlet property="polygonView" destination="nsg-Vg-R5c" id="t8a-M4-Ug1"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gsd-hr-lN8" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="right" id="KUf-uh-sDJ">
+                    <connections>
+                        <action selector="swipeHandler:" destination="6Ga-ZB-dZN" id="ziA-xi-9RK"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="left" id="tk3-Qh-yXQ">
+                    <connections>
+                        <action selector="swipeHandler:" destination="6Ga-ZB-dZN" id="dbR-xq-asi"/>
+                    </connections>
+                </swipeGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="408" y="268"/>
+        </scene>
+    </scenes>
+</document>

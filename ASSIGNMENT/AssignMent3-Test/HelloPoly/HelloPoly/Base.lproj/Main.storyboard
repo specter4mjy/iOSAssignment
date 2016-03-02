@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="HelloPoly" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kj4-4U-kjm">
+                                <rect key="frame" x="521" y="59.5" width="59" height="30"/>
+                                <state key="normal" title="Increase"/>
+                                <connections>
+                                    <action selector="increasePrese:" destination="BYZ-38-t0r" eventType="touchUpInside" id="T5L-Cj-qDU"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Triangle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bfv-1O-3KK">
+                                <rect key="frame" x="269.5" y="289.5" width="61.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3J-oe-sEh">
+                                <rect key="frame" x="20" y="59.5" width="65" height="30"/>
+                                <state key="normal" title="Decrease"/>
+                                <connections>
+                                    <action selector="decreasePress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FYw-g6-LCs"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of Sides: 3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tJz-Hb-1jK">
+                                <rect key="frame" x="20" y="20" width="147.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="bfv-1O-3KK" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="4bk-wc-UyJ"/>
+                            <constraint firstItem="kj4-4U-kjm" firstAttribute="top" secondItem="K3J-oe-sEh" secondAttribute="top" id="87K-GF-sHC"/>
+                            <constraint firstItem="tJz-Hb-1jK" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="Euh-yH-9wM"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="kj4-4U-kjm" secondAttribute="trailing" id="L0R-WZ-e64"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="tJz-Hb-1jK" secondAttribute="leading" id="NGO-G1-nTJ"/>
+                            <constraint firstItem="bfv-1O-3KK" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="RdU-GM-B8f"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="K3J-oe-sEh" secondAttribute="leading" id="Xhr-tK-zfi"/>
+                            <constraint firstItem="kj4-4U-kjm" firstAttribute="baseline" secondItem="K3J-oe-sEh" secondAttribute="baseline" id="dL6-2y-jLW"/>
+                            <constraint firstItem="K3J-oe-sEh" firstAttribute="top" secondItem="tJz-Hb-1jK" secondAttribute="bottom" constant="19" id="sgq-BQ-e3O"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="87K-GF-sHC"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="NameLabel" destination="bfv-1O-3KK" id="Q85-nj-2W0"/>
+                        <outlet property="NumberLabel" destination="tJz-Hb-1jK" id="F30-jg-iwY"/>
+                        <outlet property="decreaseButton" destination="K3J-oe-sEh" id="Pzq-S3-ZvK"/>
+                        <outlet property="increaseButton" destination="kj4-4U-kjm" id="Vrm-Dx-VXr"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+</document>
