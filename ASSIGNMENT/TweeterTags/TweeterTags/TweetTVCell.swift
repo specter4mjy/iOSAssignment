@@ -25,9 +25,27 @@ class TweetTVCell: UITableViewCell {
     @IBOutlet weak var tweetContentLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     
+    private struct MyColors{
+        static let Green = UIColor(red: 0.2275, green: 0.5098, blue: 0.251, alpha: 1.0)
+        static let Blue  = UIColor(red: 0.3137, green: 0.5137, blue: 0.698, alpha: 1.0)
+        static let Red   = UIColor(red: 0.8, green: 0.2941, blue: 0.2941, alpha: 1.0)
+    }
+    
     private func updateUI(){
         userScreenNameLabel.text = tweet?.user.screenName
-        tweetContentLabel.text = tweet?.text
+        
+        let myAttributeString = NSMutableAttributedString(string: (tweet?.text)!)
+        for hashtag in (tweet?.hashtags)!{
+            myAttributeString.addAttribute(NSForegroundColorAttributeName, value: MyColors.Blue, range: hashtag.nsrange)
+        }
+        for url in (tweet?.urls)!{
+            myAttributeString.addAttribute(NSForegroundColorAttributeName, value: MyColors.Red, range: url.nsrange)
+        }
+        for userMention in (tweet?.userMentions)!{
+            myAttributeString.addAttribute(NSForegroundColorAttributeName, value: MyColors.Green, range: userMention.nsrange)
+        }
+        tweetContentLabel.attributedText = myAttributeString
+        
         let dataFomator = NSDateFormatter()
         dataFomator.dateFormat = "dd MMM"
         dateLabel.text = dataFomator.stringFromDate((tweet?.created)!)
