@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9F3E316F1C90CF2C00220A1B /* MensionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3E316E1C90CF2C00220A1B /* MensionsTableViewController.swift */; };
+		9F3E31711C90D78C00220A1B /* ImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3E31701C90D78C00220A1B /* ImageTableViewCell.swift */; };
 		9FEAD0441C90790200989CA1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEAD0431C90790200989CA1 /* AppDelegate.swift */; };
 		9FEAD0491C90790200989CA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9FEAD0471C90790200989CA1 /* Main.storyboard */; };
 		9FEAD04B1C90790200989CA1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FEAD04A1C90790200989CA1 /* Assets.xcassets */; };
@@ -17,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9F3E316E1C90CF2C00220A1B /* MensionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MensionsTableViewController.swift; path = ../MensionsTableViewController.swift; sourceTree = "<group>"; };
+		9F3E31701C90D78C00220A1B /* ImageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageTableViewCell.swift; sourceTree = "<group>"; };
 		9FEAD0401C90790200989CA1 /* TweeterTags.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TweeterTags.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FEAD0431C90790200989CA1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9FEAD0481C90790200989CA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -60,6 +64,8 @@
 			children = (
 				9FEAD0431C90790200989CA1 /* AppDelegate.swift */,
 				9FEAD0471C90790200989CA1 /* Main.storyboard */,
+				9F3E31701C90D78C00220A1B /* ImageTableViewCell.swift */,
+				9F3E316E1C90CF2C00220A1B /* MensionsTableViewController.swift */,
 				9FEAD0591C90853E00989CA1 /* TweetTVCell.swift */,
 				9FEAD0571C90795C00989CA1 /* TweetsTVC.swift */,
 				9FEAD04A1C90790200989CA1 /* Assets.xcassets */,
@@ -142,8 +148,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F3E316F1C90CF2C00220A1B /* MensionsTableViewController.swift in Sources */,
 				9FEAD0561C90791B00989CA1 /* TwitterAPI.swift in Sources */,
 				9FEAD0441C90790200989CA1 /* AppDelegate.swift in Sources */,
+				9F3E31711C90D78C00220A1B /* ImageTableViewCell.swift in Sources */,
 				9FEAD0581C90795C00989CA1 /* TweetsTVC.swift in Sources */,
 				9FEAD05A1C90853E00989CA1 /* TweetTVCell.swift in Sources */,
 			);
@@ -293,6 +301,7 @@
 				9FEAD0541C90790200989CA1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

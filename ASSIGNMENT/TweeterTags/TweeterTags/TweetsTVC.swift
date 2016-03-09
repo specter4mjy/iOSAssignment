@@ -10,6 +10,7 @@ import UIKit
 
 class TweetsTVC: UITableViewController, UITextFieldDelegate {
     
+    
     @IBOutlet weak var twitterQueryTextField: UITextField!{
         didSet{
             twitterQueryTextField.text = twitterQueryText
@@ -25,7 +26,7 @@ class TweetsTVC: UITableViewController, UITextFieldDelegate {
     }
     
     private func refresh(){
-       let request = TwitterRequest(search: twitterQueryText, count: 100)
+       let request = TwitterRequest(search: twitterQueryText, count: 50)
         request.fetchTweets { newTweets in
             dispatch_async(dispatch_get_main_queue() ){
                 self.tweets.insert( newTweets, atIndex: 0)
@@ -36,7 +37,8 @@ class TweetsTVC: UITableViewController, UITextFieldDelegate {
     }
     
     private struct Identifiers {
-        static let PrototypeCell = "tweetCell"
+        static let prototypeCell = "tweetCell"
+        static let clickSegue = "Show Mentions"
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -74,12 +76,14 @@ class TweetsTVC: UITableViewController, UITextFieldDelegate {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(Identifiers.PrototypeCell, forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier(Identifiers.prototypeCell, forIndexPath: indexPath)
 
         let tweetCell = cell as! TweetTVCell
         tweetCell.tweet = tweets[indexPath.section][indexPath.row]
         return tweetCell
     }
+    
+    
 
     /*
     // Override to support conditional editing of the table view.
@@ -116,14 +120,20 @@ class TweetsTVC: UITableViewController, UITextFieldDelegate {
     }
     */
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if let identifier = segue.identifier{
+            switch identifier{
+            case Identifiers.clickSegue:
+                if let dvc = segue.destinationViewController as? MensionsTableViewController{
+                    let senderCell = sender as! TweetTVCell
+                    dvc.tweet = senderCell.tweet
+                }
+            default: break
+            }
+        }
     }
-    */
 
 }
