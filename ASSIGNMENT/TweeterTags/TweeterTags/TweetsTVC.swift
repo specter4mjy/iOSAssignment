@@ -13,7 +13,6 @@ class TweetsTVC: UITableViewController, UITextFieldDelegate {
     
     @IBOutlet weak var twitterQueryTextField: UITextField!{
         didSet{
-            twitterQueryTextField.text = twitterQueryText
             twitterQueryTextField.delegate = self
         }
     }
@@ -21,6 +20,9 @@ class TweetsTVC: UITableViewController, UITextFieldDelegate {
     
     var twitterQueryText = "#image" {
         didSet{
+            twitterQueryTextField.text = twitterQueryText
+            tweets.removeAll()
+            tableView.reloadData()
             refresh()
         }
     }
@@ -49,6 +51,8 @@ class TweetsTVC: UITableViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        twitterQueryTextField.text = twitterQueryText
         
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -135,5 +139,7 @@ class TweetsTVC: UITableViewController, UITextFieldDelegate {
             }
         }
     }
+    
+    @IBAction func unwindSegueAction(unwindSegue: UIStoryboardSegue){ }
 
 }

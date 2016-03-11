@@ -10,12 +10,13 @@ import UIKit
 
 class MensionsTableViewController: UITableViewController {
     
-    private let sectionTitles = ["Images","URLs","Hashtags","Users"]
+    private let sectionTitles:[String?] = ["Images","URLs","Hashtags","Users"]
     
     private struct Identifiers {
-        static let imageCell = "ImageCell"
-        static let textCell  = "TextCell"
-        static let showImage = "Show Tweet Image"
+        static let imageCell  = "ImageCell"
+        static let textCell   = "TextCell"
+        static let showImage  = "Show Tweet Image"
+        static let showSearch = "Show Search"
     }
     
     private var tweetData = [[String]]()
@@ -24,7 +25,7 @@ class MensionsTableViewController: UITableViewController {
     var tweet : Tweet?{
         didSet{
             tweetData.removeAll()
-            tweetData.append([""])
+            tweetData.append((tweet?.media.map{ $0.url.description})!)
             tweetData.append((tweet?.urls.map{ $0.keyword})!)
             tweetData.append((tweet?.hashtags.map{ $0.keyword})!)
             tweetData.append((tweet?.userMentions.map{ $0.keyword})!)
@@ -61,41 +62,54 @@ class MensionsTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return section == 0 ? (tweet?.media.count)! : tweetData[section].count
+        return tweetData[section].count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
+        let data = tweetData[indexPath.section][indexPath.row]
         
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier(Identifiers.imageCell, forIndexPath: indexPath)
             let imageCell = cell as! ImageTableViewCell
-            dispatch_async(dispatch_get_global_queue (QOS_CLASS_USER_INITIATED, 0)){
-                if let imageData = NSData(contentsOfURL: (self.tweet?.media.first?.url)!){
-                    dispatch_async( dispatch_get_main_queue()){
-                        let image = UIImage(data: imageData)
-                        imageCell.tweetImage = image
-                    }
-                }
-            }
+            fetchImage(imageCell, data: data)
             return imageCell
         default:
             let cell = tableView.dequeueReusableCellWithIdentifier(Identifiers.textCell, forIndexPath: indexPath)
-            cell.textLabel?.text = tweetData[indexPath.section][indexPath.row]
+            cell.textLabel?.text = data
             return cell
+        }
+    }
+    
+    private func fetchImage(imageCell : ImageTableViewCell, data: String) {
+        dispatch_async(dispatch_get_global_queue (QOS_CLASS_USER_INITIATED, 0)){
+            let imageUrl = NSURL(string: data)
+            if let imageData = NSData(contentsOfURL: imageUrl!){
+                dispatch_async( dispatch_get_main_queue()){
+                    let image = UIImage(data: imageData)
+                    imageCell.tweetImage = image
+                }
+            }
         }
     }
 
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sectionTitles.map{
-            if section == 0{
-                return ((tweet?.media.isEmpty) != nil) ? nil : $0
-            }
-            else {
-                return tweetData[section].isEmpty ? nil : $0
-            }
-        }[section]
+        return sectionTitles.map{ tweetData[section].isEmpty ? nil : $0 }[section]
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        switch indexPath.section{
+        case 0:
+            performSegueWithIdentifier(Identifiers.showImage, sender: tableView.cellForRowAtIndexPath(indexPath))
+        case 1:
+            let urlString = tweetData[indexPath.section][indexPath.row]
+            let url = NSURL(string: urlString)
+            UIApplication.sharedApplication().openURL(url!)
+        case 2...3:
+            performSegueWithIdentifier(Identifiers.showSearch, sender: tableView.cellForRowAtIndexPath(indexPath))
+        default:break
+        }
     }
     
     
@@ -112,42 +126,6 @@ class MensionsTableViewController: UITableViewController {
         }
     }
     
-    
-    
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
 
     // MARK: - Navigation
 
@@ -161,11 +139,18 @@ class MensionsTableViewController: UITableViewController {
                         tweetImageVC.tweetImage = imageCell.tweetImage
                     }
                 }
+            case Identifiers.showSearch:
+                if let tweetsTVC = segue.destinationViewController as? TweetsTVC{
+                    if let textCell = sender as? UITableViewCell{
+                        tweetsTVC.twitterQueryText = (textCell.textLabel?.text)!
+                    }
+                }
             default:break
             }
         }
     }
-
+    
+    
 }
 
 

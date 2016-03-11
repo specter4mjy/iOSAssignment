@@ -37,14 +37,14 @@ class TweetImageViewController: UIViewController,UIScrollViewDelegate {
         let imageWidth = (tweetImage?.size.width)!
         let scrollViewWidthOverImageViewWidthRatio = viewWidth / imageWidth
         let scrollHeightOverImageViewHeightRatio =  viewHeight / imageHeight
-        let minScaleRatio = min(scrollHeightOverImageViewHeightRatio, scrollViewWidthOverImageViewWidthRatio)
-        imageScrollView.minimumZoomScale = minScaleRatio
-        imageScrollView.maximumZoomScale = minScaleRatio * Constants.maxOverMinZoomScaleRatio
+        let maxScaleRatio = max(scrollHeightOverImageViewHeightRatio, scrollViewWidthOverImageViewWidthRatio)
+        imageScrollView.minimumZoomScale = maxScaleRatio
+        imageScrollView.maximumZoomScale = maxScaleRatio * Constants.maxOverMinZoomScaleRatio
         imageScrollView.contentSize = (tweetImage?.size)!
-        imageScrollView.zoomScale = minScaleRatio
-        let topBottonInset =  (viewHeight - imageHeight * minScaleRatio) / 2
-        let letRightInset  =  (viewWidth  - imageWidth  * minScaleRatio) / 2
-        imageScrollView.contentInset = UIEdgeInsetsMake(topBottonInset, letRightInset, topBottonInset, letRightInset)
+        imageScrollView.zoomScale = maxScaleRatio
+        let offsetX = -(viewWidth - imageWidth * maxScaleRatio) / 2
+        let offsetY = -(viewHeight - imageHeight * maxScaleRatio) / 2
+        imageScrollView.contentOffset = CGPoint(x: offsetX, y: offsetY)
     }
     
     
@@ -75,4 +75,5 @@ class TweetImageViewController: UIViewController,UIScrollViewDelegate {
     }
     */
 
+    
 }
