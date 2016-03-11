@@ -26,7 +26,7 @@
                                 <rect key="frame" x="0.0" y="122" width="600" height="153"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="s30-0q-haf" id="5TL-8O-MSw">
-                                    <rect key="frame" x="0.0" y="0.0" width="567" height="152.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="567" height="153"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fz5-qY-bOr">
@@ -123,6 +123,7 @@
                                 </constraints>
                                 <connections>
                                     <outlet property="tweetImageView" destination="hrY-Rr-d6n" id="Lz2-cz-jJX"/>
+                                    <segue destination="Fjm-BF-0cJ" kind="show" identifier="Show Tweet Image" id="cNV-7O-TgC"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TextCell" textLabel="ohq-6s-g9r" rowHeight="71" style="IBUITableViewCellStyleDefault" id="egN-hu-tBW">
@@ -152,6 +153,38 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zmQ-wl-mMc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1550" y="400"/>
+        </scene>
+        <!--Tweet Image View Controller-->
+        <scene sceneID="bdk-sw-0RV">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="Fjm-BF-0cJ" customClass="TweetImageViewController" customModule="TweeterTags" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Cvh-4n-7JZ"/>
+                        <viewControllerLayoutGuide type="bottom" id="Obh-FQ-UD3"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="AVy-XZ-sbn">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qhn-Aj-X6B">
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Qhn-Aj-X6B" firstAttribute="centerX" secondItem="AVy-XZ-sbn" secondAttribute="centerX" id="KFY-j6-ZOr"/>
+                            <constraint firstItem="Qhn-Aj-X6B" firstAttribute="top" secondItem="Cvh-4n-7JZ" secondAttribute="bottom" id="RG5-9F-ahW"/>
+                            <constraint firstItem="Obh-FQ-UD3" firstAttribute="top" secondItem="Qhn-Aj-X6B" secondAttribute="bottom" id="Zuz-2j-1ew"/>
+                            <constraint firstItem="Qhn-Aj-X6B" firstAttribute="width" secondItem="AVy-XZ-sbn" secondAttribute="width" id="dHC-NX-FRa"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageScrollView" destination="Qhn-Aj-X6B" id="COc-sI-4Yg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="y4h-nr-jXy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2298" y="400"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="YaT-eR-GeP">

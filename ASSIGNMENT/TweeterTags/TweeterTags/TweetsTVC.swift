@@ -19,7 +19,7 @@ class TweetsTVC: UITableViewController, UITextFieldDelegate {
     }
     var tweets = [[Tweet]]()
     
-    var twitterQueryText = "#ucd" {
+    var twitterQueryText = "#image" {
         didSet{
             refresh()
         }

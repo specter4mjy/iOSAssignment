@@ -15,6 +15,7 @@ class MensionsTableViewController: UITableViewController {
     private struct Identifiers {
         static let imageCell = "ImageCell"
         static let textCell  = "TextCell"
+        static let showImage = "Show Tweet Image"
     }
     
     private var tweetData = [[String]]()
@@ -30,6 +31,7 @@ class MensionsTableViewController: UITableViewController {
             refresh()
         }
     }
+    
     
     private func refresh(){
         tableView.reloadData()
@@ -147,14 +149,52 @@ class MensionsTableViewController: UITableViewController {
     }
     */
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if let identifier = segue.identifier{
+            switch identifier{
+            case Identifiers.showImage:
+                if let tweetImageVC = segue.destinationViewController as? TweetImageViewController{
+                    if let imageCell = sender as? ImageTableViewCell{
+                        tweetImageVC.tweetImage = imageCell.tweetImage
+                    }
+                }
+            default:break
+            }
+        }
     }
-    */
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

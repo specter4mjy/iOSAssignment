@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9F2BC35F1C9229A100DB447B /* TweetImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2BC35E1C9229A100DB447B /* TweetImageViewController.swift */; };
 		9F3E316F1C90CF2C00220A1B /* MensionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3E316E1C90CF2C00220A1B /* MensionsTableViewController.swift */; };
 		9F3E31711C90D78C00220A1B /* ImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3E31701C90D78C00220A1B /* ImageTableViewCell.swift */; };
 		9FEAD0441C90790200989CA1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEAD0431C90790200989CA1 /* AppDelegate.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9F2BC35E1C9229A100DB447B /* TweetImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetImageViewController.swift; sourceTree = "<group>"; };
 		9F3E316E1C90CF2C00220A1B /* MensionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MensionsTableViewController.swift; path = ../MensionsTableViewController.swift; sourceTree = "<group>"; };
 		9F3E31701C90D78C00220A1B /* ImageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageTableViewCell.swift; sourceTree = "<group>"; };
 		9FEAD0401C90790200989CA1 /* TweeterTags.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TweeterTags.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,6 +66,7 @@
 			children = (
 				9FEAD0431C90790200989CA1 /* AppDelegate.swift */,
 				9FEAD0471C90790200989CA1 /* Main.storyboard */,
+				9F2BC35E1C9229A100DB447B /* TweetImageViewController.swift */,
 				9F3E31701C90D78C00220A1B /* ImageTableViewCell.swift */,
 				9F3E316E1C90CF2C00220A1B /* MensionsTableViewController.swift */,
 				9FEAD0591C90853E00989CA1 /* TweetTVCell.swift */,
@@ -149,6 +152,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F3E316F1C90CF2C00220A1B /* MensionsTableViewController.swift in Sources */,
+				9F2BC35F1C9229A100DB447B /* TweetImageViewController.swift in Sources */,
 				9FEAD0561C90791B00989CA1 /* TwitterAPI.swift in Sources */,
 				9FEAD0441C90790200989CA1 /* AppDelegate.swift in Sources */,
 				9F3E31711C90D78C00220A1B /* ImageTableViewCell.swift in Sources */,
