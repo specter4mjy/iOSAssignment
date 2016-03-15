@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TweetsTVC: UITableViewController, UITextFieldDelegate {
+class TweetsTVC: UITableViewController, UITextFieldDelegate,UITabBarDelegate {
     
     
     @IBOutlet weak var twitterQueryTextField: UITextField!{
@@ -18,12 +18,23 @@ class TweetsTVC: UITableViewController, UITextFieldDelegate {
     }
     var tweets = [[Tweet]]()
     
+    struct UserDefaultKeys{
+        static let searchHistories = "SearchHistory"
+    }
+    
     var twitterQueryText = "#image" {
         didSet{
-            twitterQueryTextField.text = twitterQueryText
+            let defaults = NSUserDefaults.standardUserDefaults()
+            var searchData = defaults.stringArrayForKey(UserDefaultKeys.searchHistories) ?? [String]()
+            searchData.insert(twitterQueryText, atIndex: 0)
+            defaults.setObject(searchData, forKey: UserDefaultKeys.searchHistories)
+            defaults.synchronize()
+            
+            twitterQueryTextField?.text = twitterQueryText
             tweets.removeAll()
             tableView.reloadData()
             refresh()
+            navigationController?.popToViewController(self, animated: true)
         }
     }
     
@@ -141,5 +152,5 @@ class TweetsTVC: UITableViewController, UITextFieldDelegate {
     }
     
     @IBAction func unwindSegueAction(unwindSegue: UIStoryboardSegue){ }
-
+    
 }
