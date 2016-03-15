@@ -22,8 +22,18 @@ class TweetsTVC: UITableViewController, UITextFieldDelegate,UITabBarDelegate {
         static let searchHistories = "SearchHistory"
     }
     
+    
+    
     var twitterQueryText = "#image" {
         didSet{
+            // Strange !!!
+            // I should use navi
+            
+//            navigationController?.popViewControllerAnimated(true)
+//            if navigationController?.visibleViewController != self{
+//                navigationController?.popViewControllerAnimated(true)
+//            }
+            
             let defaults = NSUserDefaults.standardUserDefaults()
             var searchData = defaults.stringArrayForKey(UserDefaultKeys.searchHistories) ?? [String]()
             searchData.insert(twitterQueryText, atIndex: 0)
@@ -34,9 +44,11 @@ class TweetsTVC: UITableViewController, UITextFieldDelegate,UITabBarDelegate {
             tweets.removeAll()
             tableView.reloadData()
             refresh()
-            navigationController?.popToViewController(self, animated: true)
+            
+            
         }
     }
+    
     
     private func refresh(){
        let request = TwitterRequest(search: twitterQueryText, count: 50)

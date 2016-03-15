@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MensionsTableViewController: UITableViewController {
+class MensionsTableViewController: UITableViewController, NeedPopToRootVCDelegate {
     
     private let sectionTitles:[String?] = ["Images","URLs","Hashtags","Users"]
     
@@ -38,6 +38,16 @@ class MensionsTableViewController: UITableViewController {
         tableView.reloadData()
     }
 
+    var needPopToRootVC = false
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        if needPopToRootVC {
+            navigationController?.popToRootViewControllerAnimated(true)
+            needPopToRootVC = false
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

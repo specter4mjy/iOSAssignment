@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol NeedPopToRootVCDelegate{
+    var needPopToRootVC:Bool {get set}
+}
+
 class HistoryTableViewController: UITableViewController {
     
     private struct Identifiers{
@@ -58,6 +62,10 @@ class HistoryTableViewController: UITableViewController {
         var searchVC = tabBarController?.viewControllers![0]
         if let nVC = searchVC as? UINavigationController{
             searchVC = nVC.viewControllers[0]
+            if nVC.viewControllers.count > 1{
+                var topVC = nVC.visibleViewController as! NeedPopToRootVCDelegate
+                topVC.needPopToRootVC = true
+            }
         }
         let tweetVC = searchVC as! TweetsTVC
         tweetVC.twitterQueryText = searchData![indexPath.row]

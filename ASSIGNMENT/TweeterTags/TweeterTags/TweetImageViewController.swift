@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TweetImageViewController: UIViewController,UIScrollViewDelegate {
+class TweetImageViewController: UIViewController,UIScrollViewDelegate,NeedPopToRootVCDelegate {
     
     private struct Constants{
         static let maxOverMinZoomScaleRatio:CGFloat = 3
@@ -47,6 +47,15 @@ class TweetImageViewController: UIViewController,UIScrollViewDelegate {
         imageScrollView.contentOffset = CGPoint(x: offsetX, y: offsetY)
     }
     
+    var needPopToRootVC = false
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        if needPopToRootVC {
+            navigationController?.popToRootViewControllerAnimated(true)
+            needPopToRootVC = false
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
