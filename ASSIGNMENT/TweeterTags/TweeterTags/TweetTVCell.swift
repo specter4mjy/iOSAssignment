@@ -34,7 +34,12 @@ class TweetTVCell: UITableViewCell {
     private func updateUI(){
         userScreenNameLabel.text = tweet?.user.screenName
         
-        let myAttributeString = NSMutableAttributedString(string: (tweet?.text)!)
+        var originSting = (tweet?.text)!
+        if tweet?.media.count > 0{
+            originSting += "📷"
+        }
+        
+        let myAttributeString = NSMutableAttributedString(string: originSting )
         for hashtag in (tweet?.hashtags)!{
             myAttributeString.addAttribute(NSForegroundColorAttributeName, value: MyColors.Blue, range: hashtag.nsrange)
         }
@@ -44,7 +49,9 @@ class TweetTVCell: UITableViewCell {
         for userMention in (tweet?.userMentions)!{
             myAttributeString.addAttribute(NSForegroundColorAttributeName, value: MyColors.Green, range: userMention.nsrange)
         }
+        
         tweetContentLabel.attributedText = myAttributeString
+        
         
         let dataFomator = NSDateFormatter()
         dataFomator.dateFormat = "dd MMM"
