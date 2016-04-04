@@ -15,18 +15,34 @@ class BreakoutBehavior: UIDynamicBehavior {
         return collisionBehavior
     }()
     
+    private lazy var itemBehavior : UIDynamicItemBehavior = {
+        let itemBehavior = UIDynamicItemBehavior()
+        itemBehavior.elasticity = 1.0
+        itemBehavior.friction = 0.0
+        itemBehavior.resistance = 0.0
+        return itemBehavior
+    }()
+    
+    
     override init() {
         super.init()
         addChildBehavior(collisionBehavior)
+        addChildBehavior(itemBehavior)
+
     }
     
     func addItem(viewItem: UIView) {
+        dynamicAnimator?.referenceView?.addSubview(viewItem)
         collisionBehavior.addItem(viewItem)
+        itemBehavior.addItem(viewItem)
+
     }
     
     func removeItem(viewItem: UIView){
+        dynamicAnimator?.referenceView?.addSubview(viewItem)
         collisionBehavior.removeItem(viewItem)
+        itemBehavior.removeItem(viewItem)
     }
-}
+
 
 }
