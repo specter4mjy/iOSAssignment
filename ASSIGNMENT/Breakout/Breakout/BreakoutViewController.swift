@@ -12,6 +12,8 @@ import UIKit
 class BreakoutViewController: UIViewController {
     
     let breakoutModel = BreakoutModel()
+    
+    let paddleIdentifier = "paddle"
 
     @IBOutlet weak var gameView: UIView!
     
@@ -19,6 +21,7 @@ class BreakoutViewController: UIViewController {
         let dynamicAnimator = UIDynamicAnimator(referenceView: self.gameView)
         return dynamicAnimator
     }()
+    
     
 
     
@@ -56,11 +59,11 @@ class BreakoutViewController: UIViewController {
         gameView.addSubview(paddleView)
         
 
-        breakoutBehavior.addCollisionBoundary("paddle", path: UIBezierPath(rect: paddleView.frame))
+        breakoutBehavior.addCollisionBoundaryOfViewFrame(paddleIdentifier, viewItem: paddleView)
         
         
         let pushBehavior = UIPushBehavior(items: [ballView], mode: .Instantaneous)
-        pushBehavior.setAngle(CGFloat(-M_PI_4), magnitude: 0.4)
+        pushBehavior.setAngle(CGFloat(-M_PI_4), magnitude: 0.5)
         pushBehavior.action = { [unowned pushBehavior] in
             self.dynamicAnimator.removeBehavior(pushBehavior)
         }
@@ -70,6 +73,20 @@ class BreakoutViewController: UIViewController {
     @IBAction func tapGestureHandler(sender: UITapGestureRecognizer) {
         if sender.state == .Ended{
             
+        }
+    }
+    @IBAction func panGestureHandler(sender: UIPanGestureRecognizer) {
+        switch sender.state {
+        case .Began:
+            fallthrough
+        case .Changed:
+            let point = sender.locationInView(gameView)
+            if ( point.x > paddleView.bounds.size.width / 2 && point.x < gameView.bounds.width - paddleView.bounds.size.width / 2 ){
+            self.paddleView.center.x = point.x
+            self.breakoutBehavior.moveCollisionBoundaryOfViewFrame(self.paddleIdentifier, viewItem: self.paddleView)
+            }
+        default:
+            break
         }
     }
 }

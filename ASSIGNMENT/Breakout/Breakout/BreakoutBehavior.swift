@@ -20,6 +20,8 @@ class BreakoutBehavior: UIDynamicBehavior {
         itemBehavior.elasticity = 1.0
         itemBehavior.friction = 0.0
         itemBehavior.resistance = 0.0
+        itemBehavior.angularResistance = 0.0
+        itemBehavior.allowsRotation = false
         return itemBehavior
     }()
     
@@ -43,8 +45,17 @@ class BreakoutBehavior: UIDynamicBehavior {
         itemBehavior.removeItem(viewItem)
     }
     
-    func addCollisionBoundary( identifier: String, path : UIBezierPath){
+    func addCollisionBoundaryOfViewFrame( identifier: String, viewItem: UIView){
+      
+        let path = UIBezierPath(rect: viewItem.frame)
         collisionBehavior.addBoundaryWithIdentifier(identifier, forPath: path)
+    }
+    
+    func moveCollisionBoundaryOfViewFrame( identifier: String, viewItem: UIView){
+        collisionBehavior.removeBoundaryWithIdentifier(identifier)
+        let path = UIBezierPath(rect: viewItem.frame)
+        collisionBehavior.addBoundaryWithIdentifier(identifier, forPath: path)
+
     }
 
 
