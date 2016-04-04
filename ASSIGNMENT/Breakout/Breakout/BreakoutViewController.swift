@@ -10,6 +10,8 @@ import UIKit
 
 
 class BreakoutViewController: UIViewController {
+    
+    let breakoutModel = BreakoutModel()
 
     @IBOutlet weak var gameView: UIView!
     
@@ -18,18 +20,25 @@ class BreakoutViewController: UIViewController {
         return dynamicAnimator
     }()
     
+
+    
     private lazy var ballView : UIView = {
-        let size = CGSize(width: 20, height: 20)
-        let origin = CGPoint(x: self.gameView.bounds.midX, y: self.gameView.bounds.midY)
+        let size = self.breakoutModel.ballSize
+        let origin = CGPoint(x: self.gameView.bounds.midX - size.width / 2, y: self.gameView.bounds.midY - size.height / 2)
         let rect = CGRect(origin: origin, size: size)
         var ballView = UIView(frame: rect)
         ballView.backgroundColor = UIColor.darkGrayColor()
-        ballView.layer.cornerRadius = 10
+        ballView.layer.cornerRadius = min(size.height, size.width) / 2
         return ballView
     }()
     
     private lazy var paddleView : UIView = {
-        
+        let size = self.breakoutModel.paddleSize
+        let origin = CGPoint(x: self.gameView.bounds.midX - size.width / 2, y: self.gameView.bounds.height - 2 * size.height)
+        let rect = CGRect(origin: origin, size: size)
+        var paddleView = UIView(frame: rect)
+        paddleView.backgroundColor = UIColor.blueColor()
+        return paddleView
     }()
     
     
@@ -39,14 +48,19 @@ class BreakoutViewController: UIViewController {
         super.viewDidLoad()
         dynamicAnimator.addBehavior(breakoutBehavior)
 
+
     }
     
     override func viewDidLayoutSubviews() {
         breakoutBehavior.addItem(ballView)
+        gameView.addSubview(paddleView)
+        
 
+        breakoutBehavior.addCollisionBoundary("paddle", path: UIBezierPath(rect: paddleView.frame))
+        
         
         let pushBehavior = UIPushBehavior(items: [ballView], mode: .Instantaneous)
-        pushBehavior.setAngle(CGFloat(-M_PI_4), magnitude: 0.15)
+        pushBehavior.setAngle(CGFloat(-M_PI_4), magnitude: 0.4)
         pushBehavior.action = { [unowned pushBehavior] in
             self.dynamicAnimator.removeBehavior(pushBehavior)
         }

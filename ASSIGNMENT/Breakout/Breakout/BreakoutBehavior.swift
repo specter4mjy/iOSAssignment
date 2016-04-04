@@ -28,7 +28,6 @@ class BreakoutBehavior: UIDynamicBehavior {
         super.init()
         addChildBehavior(collisionBehavior)
         addChildBehavior(itemBehavior)
-
     }
     
     func addItem(viewItem: UIView) {
@@ -42,6 +41,10 @@ class BreakoutBehavior: UIDynamicBehavior {
         dynamicAnimator?.referenceView?.addSubview(viewItem)
         collisionBehavior.removeItem(viewItem)
         itemBehavior.removeItem(viewItem)
+    }
+    
+    func addCollisionBoundary( identifier: String, path : UIBezierPath){
+        collisionBehavior.addBoundaryWithIdentifier(identifier, forPath: path)
     }
 
 
