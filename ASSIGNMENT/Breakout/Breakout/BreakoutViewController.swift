@@ -115,20 +115,20 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
             if let brickIndex = Int(boundaryIdentifier){
                 if 0...24 ~= brickIndex {
                     breakoutBehavior.removeCollisonBoundaryWithIdentifier(boundaryIdentifier)
-                    let hittedBrick = gameView.viewWithTag(brickIndex + 1)!
+                    let hitBrick = gameView.viewWithTag(brickIndex + 1)!
                     UIView.animateKeyframesWithDuration(1.2, delay: 0.0, options: .CalculationModeLinear, animations: {
                         UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 0.3, animations: {
-                            hittedBrick.backgroundColor = UIColor.whiteColor()
+                            hitBrick.backgroundColor = UIColor.whiteColor()
                         })
                         UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 0.3, animations: {
-                            hittedBrick.backgroundColor = UIColor.darkGrayColor()
+                            hitBrick.backgroundColor = UIColor.darkGrayColor()
                         })
                         UIView.addKeyframeWithRelativeStartTime(0.6, relativeDuration: 0.6, animations: {
-                            hittedBrick.backgroundColor = UIColor.lightGrayColor()
-                            hittedBrick.alpha = 0.0
+                            hitBrick.backgroundColor = UIColor.lightGrayColor()
+                            hitBrick.alpha = 0.0
                         })
                         }, completion: { _ in
-                            hittedBrick.removeFromSuperview()
+                            hitBrick.removeFromSuperview()
                     })
                     numberOfBricksLeft -= 1
                     if numberOfBricksLeft == 0 {
