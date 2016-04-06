@@ -27,7 +27,8 @@ class BreakoutViewController: UIViewController {
     
     private lazy var ballView : UIView = {
         let size = self.breakoutModel.ballSize
-        let origin = CGPoint(x: self.gameView.bounds.midX - size.width / 2, y: self.gameView.bounds.midY - size.height / 2)
+        let origin = CGPoint(x: self.gameView.bounds.midX - size.width / 2,
+                             y: self.gameView.bounds.midY - size.height / 2)
         let rect = CGRect(origin: origin, size: size)
         var ballView = UIView(frame: rect)
         ballView.backgroundColor = UIColor.darkGrayColor()
@@ -37,7 +38,8 @@ class BreakoutViewController: UIViewController {
     
     private lazy var paddleView : UIView = {
         let size = self.breakoutModel.paddleSize
-        let origin = CGPoint(x: self.gameView.bounds.midX - size.width / 2, y: self.gameView.bounds.height - 2 * size.height)
+        let origin = CGPoint(x: self.gameView.bounds.midX - size.width / 2,
+                             y: self.gameView.bounds.height - self.breakoutModel.paddleDistanceToBottom)
         let rect = CGRect(origin: origin, size: size)
         var paddleView = UIView(frame: rect)
         paddleView.backgroundColor = UIColor.blueColor()
@@ -57,9 +59,11 @@ class BreakoutViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         breakoutBehavior.addItem(ballView)
         gameView.addSubview(paddleView)
+        setupBrickes()
         
-
-        breakoutBehavior.addCollisionBoundaryOfViewFrame(paddleIdentifier, viewItem: paddleView)
+        
+        breakoutBehavior.addCollisionBoundaryOfViewFrame(paddleIdentifier,
+                                                         viewItem: paddleView)
         
         
         let pushBehavior = UIPushBehavior(items: [ballView], mode: .Instantaneous)
@@ -70,6 +74,33 @@ class BreakoutViewController: UIViewController {
         dynamicAnimator.addBehavior(pushBehavior)
 
     }
+    
+    private func setupBrickes(){
+        for i in 0 ..< (breakoutModel.numberOfBricksPerRow * breakoutModel.numberOfBrickRows){
+            let brickWidth = gameView.bounds.width / CGFloat(self.breakoutModel.numberOfBricksPerRow)
+            let x = brickWidth * CGFloat(( i % breakoutModel.numberOfBricksPerRow))
+            let y = breakoutModel.brickHeight * CGFloat(( i / breakoutModel.numberOfBricksPerRow))
+                    + breakoutModel.bricksDistanceToTop
+            let origin  = CGPoint(x: x, y: y)
+            let hue = 1.0 / CGFloat(breakoutModel.numberOfBrickRows) * CGFloat(i / breakoutModel.numberOfBrickRows)
+            let color = UIColor(hue: hue, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+            let brickView = createBreakAt(origin, color: color)
+            brickView.layer.cornerRadius = breakoutModel.bricksCornerRadius
+            gameView.addSubview(brickView)
+        }
+    }
+    
+    private func createBreakAt( origin: CGPoint, color: UIColor) -> UIView{
+        let gameViewWidth = gameView.bounds.width
+        let brickWidth = gameViewWidth / CGFloat(self.breakoutModel.numberOfBricksPerRow) - breakoutModel.gapBetweenBricks
+        let brickSize = CGSize(width: brickWidth,
+                               height: breakoutModel.brickHeight - breakoutModel.gapBetweenBricks)
+        let rect = CGRect(origin: origin, size: brickSize)
+        let brickView = UIView(frame: rect)
+        brickView.backgroundColor = color
+        return brickView
+    }
+    
     @IBAction func tapGestureHandler(sender: UITapGestureRecognizer) {
         if sender.state == .Ended{
             
@@ -81,7 +112,8 @@ class BreakoutViewController: UIViewController {
             fallthrough
         case .Changed:
             let point = sender.locationInView(gameView)
-            if ( point.x > paddleView.bounds.size.width / 2 && point.x < gameView.bounds.width - paddleView.bounds.size.width / 2 ){
+            if ( point.x > paddleView.bounds.size.width / 2
+                && point.x < gameView.bounds.width - paddleView.bounds.size.width / 2 ){
             self.paddleView.center.x = point.x
             self.breakoutBehavior.moveCollisionBoundaryOfViewFrame(self.paddleIdentifier, viewItem: self.paddleView)
             }
