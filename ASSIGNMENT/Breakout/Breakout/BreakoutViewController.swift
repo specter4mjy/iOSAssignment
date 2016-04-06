@@ -22,6 +22,8 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         return dynamicAnimator
     }()
     
+    var numberOfBricksLeft = 0
+    
     
 
     
@@ -92,6 +94,7 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
             brickView.layer.cornerRadius = breakoutModel.bricksCornerRadius
             gameView.addSubview(brickView)
             brickView.tag = i + 1 // because default tag value is 0, lets start from 1
+            numberOfBricksLeft += 1
             breakoutBehavior.addCollisionBoundaryOfViewFrame("\(i)", viewItem: brickView)
         }
     }
@@ -112,10 +115,33 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
             if let brickIndex = Int(boundaryIdentifier){
                 if 0...24 ~= brickIndex {
                     breakoutBehavior.removeCollisonBoundaryWithIdentifier(boundaryIdentifier)
-                    gameView.viewWithTag(brickIndex + 1)!.hidden = true
+                    let hittedBrick = gameView.viewWithTag(brickIndex + 1)!
+                    UIView.animateKeyframesWithDuration(1.2, delay: 0.0, options: .CalculationModeLinear, animations: {
+                        UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 0.3, animations: {
+                            hittedBrick.backgroundColor = UIColor.whiteColor()
+                        })
+                        UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 0.3, animations: {
+                            hittedBrick.backgroundColor = UIColor.darkGrayColor()
+                        })
+                        UIView.addKeyframeWithRelativeStartTime(0.6, relativeDuration: 0.6, animations: {
+                            hittedBrick.backgroundColor = UIColor.lightGrayColor()
+                            hittedBrick.alpha = 0.0
+                        })
+                        }, completion: { _ in
+                            hittedBrick.removeFromSuperview()
+                    })
+                    numberOfBricksLeft -= 1
+                    if numberOfBricksLeft == 0 {
+                        gameComplete()
+                    }
                 }
             }
         }
+    }
+    
+    // callback when player success to break all bricks
+    func gameComplete(){
+       print("Congratuation!")
     }
     
     @IBAction func tapGestureHandler(sender: UITapGestureRecognizer) {

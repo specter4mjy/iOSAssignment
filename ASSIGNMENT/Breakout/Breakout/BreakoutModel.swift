@@ -10,8 +10,10 @@ import UIKit
 
 class BreakoutModel {
     var ballSize = CGSize(width: 30, height: 30)
+    
     var paddleSize = CGSize(width: 100, height: 20)
     var paddleDistanceToBottom : CGFloat = 60
+    
     var numberOfBricksPerRow = 5
     var numberOfBrickRows = 5
     var brickHeight: CGFloat = 20
