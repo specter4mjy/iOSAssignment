@@ -9,7 +9,7 @@
 import UIKit
 
 
-class BreakoutViewController: UIViewController {
+class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     
     let breakoutModel = BreakoutModel()
     
@@ -47,7 +47,11 @@ class BreakoutViewController: UIViewController {
     }()
     
     
-    private var breakoutBehavior = BreakoutBehavior()
+    private lazy var breakoutBehavior : BreakoutBehavior = {
+        let breakoutBehavior = BreakoutBehavior()
+        breakoutBehavior.collisonDelegate = self
+        return breakoutBehavior
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,6 +91,8 @@ class BreakoutViewController: UIViewController {
             let brickView = createBreakAt(origin, color: color)
             brickView.layer.cornerRadius = breakoutModel.bricksCornerRadius
             gameView.addSubview(brickView)
+            brickView.tag = i + 1 // because default tag value is 0, lets start from 1
+            breakoutBehavior.addCollisionBoundaryOfViewFrame("\(i)", viewItem: brickView)
         }
     }
     
@@ -99,6 +105,17 @@ class BreakoutViewController: UIViewController {
         let brickView = UIView(frame: rect)
         brickView.backgroundColor = color
         return brickView
+    }
+    
+    func collisionBehavior(behavior: UICollisionBehavior, beganContactForItem item: UIDynamicItem, withBoundaryIdentifier identifier: NSCopying?, atPoint p: CGPoint) {
+        if let boundaryIdentifier = identifier as? String{
+            if let brickIndex = Int(boundaryIdentifier){
+                if 0...24 ~= brickIndex {
+                    breakoutBehavior.removeCollisonBoundaryWithIdentifier(boundaryIdentifier)
+                    gameView.viewWithTag(brickIndex + 1)!.hidden = true
+                }
+            }
+        }
     }
     
     @IBAction func tapGestureHandler(sender: UITapGestureRecognizer) {
