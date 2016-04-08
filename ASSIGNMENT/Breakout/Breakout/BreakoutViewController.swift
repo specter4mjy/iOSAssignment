@@ -15,9 +15,9 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     
     let breakoutModel = BreakoutModel()
     
-    private var ballView : UIView!
+    private var ballView : UIImageView!
     
-    private var paddleView : UIView!
+    private var paddleView : UIImageView!
     
     let paddleIdentifier = "paddle"
 
@@ -69,16 +69,15 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
             let y = (breakoutModel.brickHeight + breakoutModel.gapBetweenBricks) * CGFloat(( i / breakoutModel.numberOfBricksPerRow))
                     + breakoutModel.bricksDistanceToTop
             let origin  = CGPoint(x: x, y: y)
-            let hue = 1.0 / CGFloat(breakoutModel.numberOfBrickRows) * CGFloat(i / breakoutModel.numberOfBricksPerRow)
-            let color = UIColor(hue: hue, saturation: 1.0, brightness: 1.0, alpha: 1.0)
             
             let brickSize = CGSize(width: brickWidth,
                                    height: breakoutModel.brickHeight)
             let rect = CGRect(origin: origin, size: brickSize)
-            let brickView = UIView(frame: rect)
-            brickView.backgroundColor = UIColor.init(patternImage: UIImage(named: "brick 1")!)
+            let brickView = UIImageView(frame: rect)
+            brickView.image = UIImage(named: "brick \((i / breakoutModel.numberOfBricksPerRow) + 1 )")
             
             brickView.layer.cornerRadius = breakoutModel.bricksCornerRadius
+            brickView.layer.masksToBounds = true
             gameView.addSubview(brickView)
             brickView.tag = i + 1 // because default tag value is 0, lets start from 1
             breakoutBehavior.addCollisionBoundaryOfViewFrame("\(i)", viewItem: brickView)
@@ -94,9 +93,10 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         let origin = CGPoint(x: gameView.bounds.midX - size.width / 2,
                              y: paddleView.frame.origin.y - size.height )
         let rect = CGRect(origin: origin, size: size)
-        ballView = UIView(frame: rect)
-        ballView.backgroundColor = UIColor.init(patternImage: UIImage(named: "ball")!  )
+        ballView = UIImageView(frame: rect)
+        ballView.image = UIImage(named: "ball")
         ballView.layer.cornerRadius = min(size.height, size.width) / 2
+        ballView.layer.masksToBounds = true
         breakoutBehavior.addItem(ballView)
     }
     
@@ -111,9 +111,10 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         let rect = CGRect(origin: origin, size: size)
         
         
-        paddleView = UIView(frame: rect)
-        paddleView.backgroundColor = UIColor.init(patternImage: UIImage(named: "paddle")!)
+        paddleView = UIImageView(frame: rect)
+        paddleView.image = UIImage(named: "paddle")
         paddleView.layer.cornerRadius = breakoutModel.paddleCornerRadius
+        paddleView.layer.masksToBounds = true
         gameView.addSubview(paddleView)
         breakoutBehavior.addCollisionBoundaryOfViewFrame(paddleIdentifier,
                                                          viewItem: paddleView)
@@ -126,20 +127,21 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
                 if 0..<breakoutModel.numberOfTotalBricks ~= brickIndex {
                     breakoutBehavior.removeCollisonBoundaryWithIdentifier(boundaryIdentifier)
                     let hitBrick = gameView.viewWithTag(brickIndex + 1)!
-                    UIView.animateKeyframesWithDuration(1.2, delay: 0.0, options: .CalculationModeLinear, animations: {
-                        UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 0.3, animations: {
-                            hitBrick.backgroundColor = UIColor.whiteColor()
-                        })
-                        UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 0.3, animations: {
-                            hitBrick.backgroundColor = UIColor.grayColor()
-                        })
-                        UIView.addKeyframeWithRelativeStartTime(0.6, relativeDuration: 0.6, animations: {
-                            hitBrick.backgroundColor = UIColor.lightGrayColor()
-                            hitBrick.alpha = 0.0
-                        })
-                        }, completion: { _ in
-                            hitBrick.removeFromSuperview()
-                    })
+                    hitBrick.hidden = true
+//                    UIView.animateKeyframesWithDuration(1.2, delay: 0.0, options: .CalculationModeLinear, animations: {
+//                        UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 0.3, animations: {
+//                            hitBrick.backgroundColor = UIColor.whiteColor()
+//                        })
+//                        UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 0.3, animations: {
+//                            hitBrick.backgroundColor = UIColor.grayColor()
+//                        })
+//                        UIView.addKeyframeWithRelativeStartTime(0.6, relativeDuration: 0.6, animations: {
+//                            hitBrick.backgroundColor = UIColor.lightGrayColor()
+//                            hitBrick.alpha = 0.0
+//                        })
+//                        }, completion: { _ in
+//                            hitBrick.removeFromSuperview()
+//                    })
                     numberOfBricksLeft -= 1
                     if numberOfBricksLeft == 0 {
                         gameComplete()
