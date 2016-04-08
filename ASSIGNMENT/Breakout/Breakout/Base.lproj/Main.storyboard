@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y79-dH-hU5">
-                                <rect key="frame" x="20" y="20" width="560" height="531"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="531"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <connections>
@@ -30,10 +30,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="Y79-dH-hU5" secondAttribute="trailing" id="X7b-0u-WqN"/>
+                            <constraint firstItem="Y79-dH-hU5" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="NX7-KF-5eU"/>
+                            <constraint firstAttribute="trailing" secondItem="Y79-dH-hU5" secondAttribute="trailing" id="Tyh-b7-drr"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Y79-dH-hU5" secondAttribute="bottom" id="jsx-uZ-NlW"/>
                             <constraint firstItem="Y79-dH-hU5" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="ry6-Qe-St4"/>
-                            <constraint firstItem="Y79-dH-hU5" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="vdY-in-WQD"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="game" image="Controller-50" selectedImage="Controller Filled-50" id="pcN-Uq-4Ce"/>

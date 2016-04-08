@@ -11,7 +11,13 @@ import UIKit
 
 class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     
+    private var gameStart = false
+    
     let breakoutModel = BreakoutModel()
+    
+    private var ballView : UIView!
+    
+    private var paddleView : UIView!
     
     let paddleIdentifier = "paddle"
 
@@ -23,18 +29,6 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     }()
     
     var numberOfBricksLeft = 0
-    
-    
-
-    
-    private var ballView : UIView!{
-        willSet{
-            print("warning")
-        }
-    }
-    
-    private var paddleView : UIView!
-    
     
     private lazy var breakoutBehavior : BreakoutBehavior = {
         let breakoutBehavior = BreakoutBehavior()
@@ -50,34 +44,46 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        setupBallView()
+        gameStart = false
         setupPaddleView()
+        setupBallView()
         setupBrickes()
 
     }
     
     private func setupBrickes(){
-        for i in 0 ..< (breakoutModel.numberOfBricksPerRow * breakoutModel.numberOfBrickRows){
+        numberOfBricksLeft = 0
+        for i in 0 ..< breakoutModel.numberOfTotalBricks{
             if let oldBrickView = gameView.viewWithTag(i + 1){
                 oldBrickView.removeFromSuperview()
                 breakoutBehavior.removeCollisonBoundaryWithIdentifier("\(i)")
             }
         }
-        for i in 0 ..< (breakoutModel.numberOfBricksPerRow * breakoutModel.numberOfBrickRows){
-            let brickWidth = gameView.bounds.width / CGFloat(breakoutModel.numberOfBricksPerRow)
-            let x = brickWidth * CGFloat(( i % breakoutModel.numberOfBricksPerRow))
-            let y = breakoutModel.brickHeight * CGFloat(( i / breakoutModel.numberOfBricksPerRow))
+        for i in 0 ..< breakoutModel.numberOfTotalBricks{
+            let brickRowWidth = gameView.bounds.width * CGFloat(breakoutModel.widthRatioatioOfBricksOverContainer)
+            let brickRowOffsetX = gameView.bounds.width * CGFloat(0.5 - 0.5 * breakoutModel.widthRatioatioOfBricksOverContainer)
+                                  - CGFloat(breakoutModel.numberOfBricksPerRow - 1) * breakoutModel.gapBetweenBricks * CGFloat(0.5)
+            
+            let brickWidth = brickRowWidth / CGFloat(breakoutModel.numberOfBricksPerRow)
+            let x = (brickWidth + breakoutModel.gapBetweenBricks) * CGFloat(( i % breakoutModel.numberOfBricksPerRow)) + brickRowOffsetX
+            let y = (breakoutModel.brickHeight + breakoutModel.gapBetweenBricks) * CGFloat(( i / breakoutModel.numberOfBricksPerRow))
                     + breakoutModel.bricksDistanceToTop
             let origin  = CGPoint(x: x, y: y)
-            let hue = 1.0 / CGFloat(breakoutModel.numberOfBrickRows) * CGFloat(i / breakoutModel.numberOfBrickRows)
+            let hue = 1.0 / CGFloat(breakoutModel.numberOfBrickRows) * CGFloat(i / breakoutModel.numberOfBricksPerRow)
             let color = UIColor(hue: hue, saturation: 1.0, brightness: 1.0, alpha: 1.0)
-            let brickView = createBreakAt(origin, color: color)
+            
+            let brickSize = CGSize(width: brickWidth,
+                                   height: breakoutModel.brickHeight)
+            let rect = CGRect(origin: origin, size: brickSize)
+            let brickView = UIView(frame: rect)
+            brickView.backgroundColor = color
+            
             brickView.layer.cornerRadius = breakoutModel.bricksCornerRadius
             gameView.addSubview(brickView)
             brickView.tag = i + 1 // because default tag value is 0, lets start from 1
-            numberOfBricksLeft += 1
             breakoutBehavior.addCollisionBoundaryOfViewFrame("\(i)", viewItem: brickView)
         }
+        numberOfBricksLeft = breakoutModel.numberOfTotalBricks
     }
     
     private func setupBallView() {
@@ -86,10 +92,10 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         }
         let size = breakoutModel.ballSize
         let origin = CGPoint(x: gameView.bounds.midX - size.width / 2,
-                             y: gameView.bounds.midY - size.height / 2)
+                             y: paddleView.frame.origin.y - size.height )
         let rect = CGRect(origin: origin, size: size)
         ballView = UIView(frame: rect)
-        ballView.backgroundColor = UIColor.darkGrayColor()
+        ballView.backgroundColor = UIColor.init(patternImage: UIImage(named: "ball")!  )
         ballView.layer.cornerRadius = min(size.height, size.width) / 2
         breakoutBehavior.addItem(ballView)
     }
@@ -106,27 +112,18 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         
         
         paddleView = UIView(frame: rect)
-        paddleView.backgroundColor = UIColor.blueColor()
+        paddleView.backgroundColor = UIColor(hue: 0.5917, saturation: 0.83, brightness: 0.73, alpha: 1.0) // dark blue
+        paddleView.layer.cornerRadius = breakoutModel.paddleCornerRadius
         gameView.addSubview(paddleView)
         breakoutBehavior.addCollisionBoundaryOfViewFrame(paddleIdentifier,
                                                          viewItem: paddleView)
     }
     
-    private func createBreakAt( origin: CGPoint, color: UIColor) -> UIView{
-        let gameViewWidth = gameView.bounds.width
-        let brickWidth = gameViewWidth / CGFloat(breakoutModel.numberOfBricksPerRow) - breakoutModel.gapBetweenBricks
-        let brickSize = CGSize(width: brickWidth,
-                               height: breakoutModel.brickHeight - breakoutModel.gapBetweenBricks)
-        let rect = CGRect(origin: origin, size: brickSize)
-        let brickView = UIView(frame: rect)
-        brickView.backgroundColor = color
-        return brickView
-    }
     
     func collisionBehavior(behavior: UICollisionBehavior, beganContactForItem item: UIDynamicItem, withBoundaryIdentifier identifier: NSCopying?, atPoint p: CGPoint) {
         if let boundaryIdentifier = identifier as? String{
             if let brickIndex = Int(boundaryIdentifier){
-                if 0...24 ~= brickIndex {
+                if 0..<breakoutModel.numberOfTotalBricks ~= brickIndex {
                     breakoutBehavior.removeCollisonBoundaryWithIdentifier(boundaryIdentifier)
                     let hitBrick = gameView.viewWithTag(brickIndex + 1)!
                     UIView.animateKeyframesWithDuration(1.2, delay: 0.0, options: .CalculationModeLinear, animations: {
@@ -165,6 +162,7 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
                 self.dynamicAnimator.removeBehavior(pushBehavior)
             }
             dynamicAnimator.addBehavior(pushBehavior)
+            gameStart = true
         }
     }
     @IBAction func panGestureHandler(sender: UIPanGestureRecognizer) {
@@ -172,6 +170,10 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         case .Began:
             fallthrough
         case .Changed:
+            if gameStart == false{
+                break
+            }
+            
             let point = sender.locationInView(gameView)
             if ( point.x > paddleView.bounds.size.width / 2
                 && point.x < gameView.bounds.width - paddleView.bounds.size.width / 2 ){

@@ -13,11 +13,19 @@ class BreakoutModel {
     
     var paddleSize = CGSize(width: 100, height: 20)
     var paddleDistanceToBottom : CGFloat = 30
+    var paddleCornerRadius : CGFloat {
+        return paddleSize.height / 2
+    }
     
-    var numberOfBricksPerRow = 5
-    var numberOfBrickRows = 5
+    var numberOfBricksPerRow = 4
+    var numberOfBrickRows = 7
     var brickHeight: CGFloat = 20
     var bricksDistanceToTop : CGFloat = 30
-    var gapBetweenBricks: CGFloat = 1
+    var gapBetweenBricks: CGFloat = 5
     var bricksCornerRadius : CGFloat = 7
+    var widthRatioatioOfBricksOverContainer = 0.8
+    
+    var numberOfTotalBricks : Int  {
+        return numberOfBricksPerRow * numberOfBrickRows
+    }
 }
