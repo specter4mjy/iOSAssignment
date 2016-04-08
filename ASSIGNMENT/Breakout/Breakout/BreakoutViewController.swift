@@ -127,21 +127,26 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
                 if 0..<breakoutModel.numberOfTotalBricks ~= brickIndex {
                     breakoutBehavior.removeCollisonBoundaryWithIdentifier(boundaryIdentifier)
                     let hitBrick = gameView.viewWithTag(brickIndex + 1)!
-                    hitBrick.hidden = true
-//                    UIView.animateKeyframesWithDuration(1.2, delay: 0.0, options: .CalculationModeLinear, animations: {
-//                        UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 0.3, animations: {
-//                            hitBrick.backgroundColor = UIColor.whiteColor()
-//                        })
-//                        UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 0.3, animations: {
-//                            hitBrick.backgroundColor = UIColor.grayColor()
-//                        })
-//                        UIView.addKeyframeWithRelativeStartTime(0.6, relativeDuration: 0.6, animations: {
-//                            hitBrick.backgroundColor = UIColor.lightGrayColor()
-//                            hitBrick.alpha = 0.0
-//                        })
-//                        }, completion: { _ in
-//                            hitBrick.removeFromSuperview()
-//                    })
+                    
+                    // change position
+                    UIView.animateWithDuration(0.08, delay: 0, options: [.Repeat, .Autoreverse, .CurveEaseInOut], animations: {
+                        hitBrick.center.y += 2
+                        }, completion: nil)
+                        
+                    // change alpha
+                    UIView.animateKeyframesWithDuration(0.9, delay: 0.0, options: .BeginFromCurrentState, animations: {
+                        UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 0.15, animations: {
+                            hitBrick.alpha = 0
+                        })
+                        UIView.addKeyframeWithRelativeStartTime(0.15, relativeDuration: 0.15, animations: {
+                            hitBrick.alpha = 1
+                        })
+                        UIView.addKeyframeWithRelativeStartTime(0.3, relativeDuration: 0.6, animations: {
+                            hitBrick.alpha = 0
+                        })
+                        }, completion: { _ in
+                            hitBrick.removeFromSuperview()
+                    })
                     numberOfBricksLeft -= 1
                     if numberOfBricksLeft == 0 {
                         gameComplete()
