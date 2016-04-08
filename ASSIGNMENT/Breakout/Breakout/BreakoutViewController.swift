@@ -76,7 +76,7 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
                                    height: breakoutModel.brickHeight)
             let rect = CGRect(origin: origin, size: brickSize)
             let brickView = UIView(frame: rect)
-            brickView.backgroundColor = color
+            brickView.backgroundColor = UIColor.init(patternImage: UIImage(named: "brick 1")!)
             
             brickView.layer.cornerRadius = breakoutModel.bricksCornerRadius
             gameView.addSubview(brickView)
@@ -112,7 +112,7 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         
         
         paddleView = UIView(frame: rect)
-        paddleView.backgroundColor = UIColor(hue: 0.5917, saturation: 0.83, brightness: 0.73, alpha: 1.0) // dark blue
+        paddleView.backgroundColor = UIColor.init(patternImage: UIImage(named: "paddle")!)
         paddleView.layer.cornerRadius = breakoutModel.paddleCornerRadius
         gameView.addSubview(paddleView)
         breakoutBehavior.addCollisionBoundaryOfViewFrame(paddleIdentifier,
@@ -131,7 +131,7 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
                             hitBrick.backgroundColor = UIColor.whiteColor()
                         })
                         UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 0.3, animations: {
-                            hitBrick.backgroundColor = UIColor.darkGrayColor()
+                            hitBrick.backgroundColor = UIColor.grayColor()
                         })
                         UIView.addKeyframeWithRelativeStartTime(0.6, relativeDuration: 0.6, animations: {
                             hitBrick.backgroundColor = UIColor.lightGrayColor()
