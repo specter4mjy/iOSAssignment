@@ -35,11 +35,6 @@ class SettingsTableViewController: UITableViewController {
     
     private let defaults = NSUserDefaults.standardUserDefaults()
     
-    private struct DefaultsKeys{
-        static let rowsCount = "rowsCount"
-        static let ballsCount = "ballsCount"
-        static let bounciness = "bounciness"
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,7 +69,7 @@ class SettingsTableViewController: UITableViewController {
     private func setupBrickRowsStepper(){
         bricksRowsStepper.stepValue = 1
         bricksRowsStepper.minimumValue = 1
-        bricksRowsStepper.maximumValue = 8
+        bricksRowsStepper.maximumValue = Double(BreakoutModel.maximumOfBrickRow)
         bricksRowsStepper.autorepeat = true
         bricksRowsStepper.wraps = true
     }

@@ -11,6 +11,7 @@ import UIKit
 
 class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     
+    
     private var gameStart = false
     
     let breakoutModel = BreakoutModel()
@@ -41,6 +42,7 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         dynamicAnimator.addBehavior(breakoutBehavior)
     }
     
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -52,13 +54,14 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     }
     
     private func setupBrickes(){
-        numberOfBricksLeft = 0
-        for i in 0 ..< breakoutModel.numberOfTotalBricks{
+        let maximumBricksCount = breakoutModel.numberOfBricksPerRow * BreakoutModel.maximumOfBrickRow
+        for i in 0 ..< maximumBricksCount{
             if let oldBrickView = gameView.viewWithTag(i + 1){
                 oldBrickView.removeFromSuperview()
                 breakoutBehavior.removeCollisonBoundaryWithIdentifier("\(i)")
             }
         }
+        numberOfBricksLeft = 0
         for i in 0 ..< breakoutModel.numberOfTotalBricks{
             let brickRowWidth = gameView.bounds.width * CGFloat(breakoutModel.widthRatioatioOfBricksOverContainer)
             let brickRowOffsetX = gameView.bounds.width * CGFloat(0.5 - 0.5 * breakoutModel.widthRatioatioOfBricksOverContainer)
@@ -80,9 +83,9 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
             brickView.layer.masksToBounds = true
             gameView.addSubview(brickView)
             brickView.tag = i + 1 // because default tag value is 0, lets start from 1
+            numberOfBricksLeft += 1
             breakoutBehavior.addCollisionBoundaryOfViewFrame("\(i)", viewItem: brickView)
         }
-        numberOfBricksLeft = breakoutModel.numberOfTotalBricks
     }
     
     private func setupBallView() {
@@ -164,7 +167,8 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     @IBAction func tapGestureHandler(sender: UITapGestureRecognizer) {
         if sender.state == .Ended{
             let pushBehavior = UIPushBehavior(items: [ballView], mode: .Instantaneous)
-            pushBehavior.setAngle(CGFloat(-M_PI_4), magnitude: 0.5)
+            let pushMagnitude = CGFloat(breakoutModel.bounciness)
+            pushBehavior.setAngle(CGFloat(-M_PI_4), magnitude: pushMagnitude)
             pushBehavior.action = { [unowned pushBehavior] in
                 self.dynamicAnimator.removeBehavior(pushBehavior)
             }

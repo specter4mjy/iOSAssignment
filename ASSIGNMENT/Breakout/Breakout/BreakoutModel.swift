@@ -9,7 +9,12 @@
 import UIKit
 
 class BreakoutModel {
-    var ballSize = CGSize(width: 30, height: 30)
+    
+    static let maximumOfBrickRow = 8
+    
+    private let defaults = NSUserDefaults.standardUserDefaults()
+    
+    var ballSize = CGSize(width: 22, height: 22)
     
     var paddleSize = CGSize(width: 100, height: 20)
     var paddleDistanceToBottom : CGFloat = 30
@@ -18,14 +23,21 @@ class BreakoutModel {
     }
     
     var numberOfBricksPerRow = 4
-    var numberOfBrickRows = 7
+    var numberOfBrickRows : Int {
+        return defaults.integerForKey(DefaultsKeys.rowsCount)
+    }
     var brickHeight: CGFloat = 20
     var bricksDistanceToTop : CGFloat = 30
     var gapBetweenBricks: CGFloat = 5
     var bricksCornerRadius : CGFloat = 7
     var widthRatioatioOfBricksOverContainer = 0.8
     
+    var bounciness : Float{
+        return defaults.floatForKey(DefaultsKeys.bounciness)
+    }
+    
     var numberOfTotalBricks : Int  {
         return numberOfBricksPerRow * numberOfBrickRows
     }
+    
 }
