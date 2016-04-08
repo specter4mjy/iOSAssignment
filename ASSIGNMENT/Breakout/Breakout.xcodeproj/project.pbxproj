@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9F0384BA1CB7243D00D8D609 /* SettingTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0384B91CB7243D00D8D609 /* SettingTVC.swift */; };
 		9F1BE9A71CB2F9D100495F64 /* BreakoutModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1BE9A61CB2F9D100495F64 /* BreakoutModel.swift */; };
 		9FD9F5401CB2D21400C4D6D8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD9F53F1CB2D21400C4D6D8 /* AppDelegate.swift */; };
 		9FD9F5421CB2D21400C4D6D8 /* BreakoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD9F5411CB2D21400C4D6D8 /* BreakoutViewController.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9F0384B91CB7243D00D8D609 /* SettingTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingTVC.swift; sourceTree = "<group>"; };
 		9F1BE9A61CB2F9D100495F64 /* BreakoutModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakoutModel.swift; sourceTree = "<group>"; };
 		9FD9F53C1CB2D21300C4D6D8 /* Breakout.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Breakout.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FD9F53F1CB2D21400C4D6D8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -42,6 +44,7 @@
 		9FD9F5331CB2D21300C4D6D8 = {
 			isa = PBXGroup;
 			children = (
+				9F0384B91CB7243D00D8D609 /* SettingTVC.swift */,
 				9FD9F53E1CB2D21400C4D6D8 /* Breakout */,
 				9FD9F53D1CB2D21300C4D6D8 /* Products */,
 			);
@@ -143,6 +146,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F1BE9A71CB2F9D100495F64 /* BreakoutModel.swift in Sources */,
+				9F0384BA1CB7243D00D8D609 /* SettingTVC.swift in Sources */,
 				9FD9F5521CB2D54500C4D6D8 /* BreakoutBehavior.swift in Sources */,
 				9FD9F5421CB2D21400C4D6D8 /* BreakoutViewController.swift in Sources */,
 				9FD9F5401CB2D21400C4D6D8 /* AppDelegate.swift in Sources */,

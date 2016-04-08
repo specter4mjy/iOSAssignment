@@ -51,7 +51,7 @@ class BreakoutBehavior: UIDynamicBehavior {
     }
     
     func removeItem(viewItem: UIView){
-        dynamicAnimator?.referenceView?.addSubview(viewItem)
+        viewItem.removeFromSuperview()
         collisionBehavior.removeItem(viewItem)
         itemBehavior.removeItem(viewItem)
     }
