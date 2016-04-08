@@ -58,7 +58,7 @@
         <!--Settings-->
         <scene sceneID="MnM-6J-SWj">
             <objects>
-                <tableViewController id="3Nl-kJ-fg8" sceneMemberID="viewController">
+                <tableViewController id="3Nl-kJ-fg8" customClass="SettingsTableViewController" customModule="Breakout" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="LCS-aK-Ozv">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -66,7 +66,7 @@
                         <sections>
                             <tableViewSection headerTitle="Balls" id="49H-R7-lrv">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Nsm-GW-D18">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="Nsm-GW-D18">
                                         <rect key="frame" x="0.0" y="50" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Nsm-GW-D18" id="Fmw-M0-8KU">
@@ -82,6 +82,9 @@
                                                         <segment title="4"/>
                                                         <segment title="5"/>
                                                     </segments>
+                                                    <connections>
+                                                        <action selector="changeBallsCount:" destination="3Nl-kJ-fg8" eventType="valueChanged" id="Zot-9z-N9C"/>
+                                                    </connections>
                                                 </segmentedControl>
                                             </subviews>
                                             <constraints>
@@ -94,9 +97,9 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Bricks" id="Hjn-pS-zpX">
+                            <tableViewSection headerTitle="Bricks Rows" id="Hjn-pS-zpX">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="cux-av-VyR">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="cux-av-VyR">
                                         <rect key="frame" x="0.0" y="145" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cux-av-VyR" id="fDk-o5-Bef">
@@ -122,6 +125,9 @@
                                                         </view>
                                                         <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="eSc-VN-gt8">
                                                             <rect key="frame" x="350" y="0.0" width="94" height="29"/>
+                                                            <connections>
+                                                                <action selector="changeBricksRowsCount:" destination="3Nl-kJ-fg8" eventType="valueChanged" id="ctc-U7-KRy"/>
+                                                            </connections>
                                                         </stepper>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lar-Ub-tWA">
                                                             <rect key="frame" x="467" y="14" width="117" height="0.0"/>
@@ -142,7 +148,7 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="Bounciness" id="HRp-Nm-xmg">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="r1Y-ya-vnc">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="r1Y-ya-vnc">
                                         <rect key="frame" x="0.0" y="240" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="r1Y-ya-vnc" id="734-2w-Akc">
@@ -151,6 +157,9 @@
                                             <subviews>
                                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="hkJ-JY-N0P">
                                                     <rect key="frame" x="6" y="8" width="588" height="28"/>
+                                                    <connections>
+                                                        <action selector="changeBounciness:" destination="3Nl-kJ-fg8" eventType="valueChanged" id="Ye8-FS-ymF"/>
+                                                    </connections>
                                                 </slider>
                                             </subviews>
                                             <constraints>
@@ -170,6 +179,12 @@
                         </connections>
                     </tableView>
                     <tabBarItem key="tabBarItem" title="Settings" image="Settings-50" selectedImage="Settings Filled-50" id="qjJ-bY-7DS"/>
+                    <connections>
+                        <outlet property="ballsCountSegment" destination="JAC-MO-ZyZ" id="pIj-AF-ZlD"/>
+                        <outlet property="bouncinessSlider" destination="hkJ-JY-N0P" id="cuM-Se-V3X"/>
+                        <outlet property="bricksRowsCountLabel" destination="djS-1L-wqg" id="4ow-bP-Gub"/>
+                        <outlet property="bricksRowsStepper" destination="eSc-VN-gt8" id="fIQ-IW-88a"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D1s-zK-zI8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
