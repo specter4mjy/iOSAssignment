@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreMotion
 
 
 class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
@@ -31,16 +32,51 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     
     var numberOfBricksLeft = 0
     
+    var hitBricks = [Int]()
+    
+    private var xOfPaddle:CGFloat  {
+        get{
+            return self.paddleView.center.x
+        }
+        set{
+            if gameStart == true {
+                let oldValue = self.paddleView.center.x
+                if ( newValue > paddleView.bounds.size.width / 2
+                    && newValue < gameView.bounds.width - paddleView.bounds.size.width / 2 ){
+                    movePaddleViewWithAnimationTo(newValue)
+                }
+                else if( oldValue > paddleView.bounds.size.width / 2
+                    && newValue <= paddleView.bounds.size.width / 2){
+                    movePaddleViewWithAnimationTo(self.paddleView.bounds.size.width / 2)
+                }
+                else if( oldValue < gameView.bounds.width - paddleView.bounds.size.width / 2
+                    && newValue >=  gameView.bounds.width - paddleView.bounds.size.width / 2){
+                    movePaddleViewWithAnimationTo(self.gameView.bounds.width - self.paddleView.bounds.size.width / 2)
+                }
+            }
+        }
+    }
+    
+    private let motionUpdateInterval = 0.1
+    
+    
     private lazy var breakoutBehavior : BreakoutBehavior = {
         let breakoutBehavior = BreakoutBehavior()
         breakoutBehavior.collisonDelegate = self
         return breakoutBehavior
     }()
     
+    
+    private let motionManager : CMMotionManager = {
+        let manager = AppDelegate.Motion.manager
+        return manager
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         dynamicAnimator.addBehavior(breakoutBehavior)
     }
+    
     
     
     override func viewDidLayoutSubviews() {
@@ -53,6 +89,22 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
 
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        motionManager.deviceMotionUpdateInterval = motionUpdateInterval
+        motionManager.startDeviceMotionUpdatesToQueue(NSOperationQueue.mainQueue())
+        { (data, _) in
+            if self.breakoutModel.controlMode == .motion{
+                let gravity = (data!.gravity)
+                let deviceAngle =  CGFloat(-atan(gravity.x / gravity.y) * 180 / M_PI )
+                
+                    self.xOfPaddle = self.gameView.center.x + 4 * deviceAngle
+            }
+        }
+    }
+    
+    
     private func setupBrickes(){
         let maximumBricksCount = breakoutModel.numberOfBricksPerRow * BreakoutModel.maximumOfBrickRow
         for i in 0 ..< maximumBricksCount{
@@ -62,6 +114,7 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
             }
         }
         numberOfBricksLeft = 0
+        hitBricks.removeAll()
         for i in 0 ..< breakoutModel.numberOfTotalBricks{
             let brickRowWidth = gameView.bounds.width * CGFloat(breakoutModel.widthRatioatioOfBricksOverContainer)
             let brickRowOffsetX = gameView.bounds.width * CGFloat(0.5 - 0.5 * breakoutModel.widthRatioatioOfBricksOverContainer)
@@ -88,13 +141,20 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         }
     }
     
+    private func movePaddleViewWithAnimationTo( x: CGFloat){
+        UIView.animateWithDuration(motionUpdateInterval, animations: {
+            self.paddleView.center.x = x
+        })
+        breakoutBehavior.moveCollisionBoundaryOfViewFrame(paddleIdentifier, viewItem: paddleView)
+    }
+    
     private func setupBallView() {
         if ballView != nil {
             breakoutBehavior.removeItem(ballView)
         }
         let size = breakoutModel.ballSize
         let origin = CGPoint(x: gameView.bounds.midX - size.width / 2,
-                             y: paddleView.frame.origin.y - size.height )
+                             y: paddleView.frame.origin.y - size.height)
         let rect = CGRect(origin: origin, size: size)
         ballView = UIImageView(frame: rect)
         ballView.image = UIImage(named: "ball")
@@ -124,11 +184,15 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     }
     
     
+    
+    
     func collisionBehavior(behavior: UICollisionBehavior, beganContactForItem item: UIDynamicItem, withBoundaryIdentifier identifier: NSCopying?, atPoint p: CGPoint) {
         if let boundaryIdentifier = identifier as? String{
             if let brickIndex = Int(boundaryIdentifier){
+                if hitBricks.contains(brickIndex){
+                    return
+                }
                 if 0..<breakoutModel.numberOfTotalBricks ~= brickIndex {
-                    breakoutBehavior.removeCollisonBoundaryWithIdentifier(boundaryIdentifier)
                     let hitBrick = gameView.viewWithTag(brickIndex + 1)!
                     
                     // change position
@@ -149,7 +213,11 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
                         })
                         }, completion: { _ in
                             hitBrick.removeFromSuperview()
+                            self.breakoutBehavior.removeCollisonBoundaryWithIdentifier(boundaryIdentifier)
                     })
+                    
+                    hitBricks.append(brickIndex)
+                    print(brickIndex)
                     numberOfBricksLeft -= 1
                     if numberOfBricksLeft == 0 {
                         gameComplete()
@@ -177,24 +245,20 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         }
     }
     @IBAction func panGestureHandler(sender: UIPanGestureRecognizer) {
-        switch sender.state {
-        case .Began:
-            fallthrough
-        case .Changed:
-            if gameStart == false{
+        if breakoutModel.controlMode == .gesture{
+            switch sender.state {
+            case .Began:
+                fallthrough
+            case .Changed:
+                
+                let point = sender.locationInView(gameView)
+                xOfPaddle = point.x
+            default:
                 break
             }
-            
-            let point = sender.locationInView(gameView)
-            if ( point.x > paddleView.bounds.size.width / 2
-                && point.x < gameView.bounds.width - paddleView.bounds.size.width / 2 ){
-            paddleView.center.x = point.x
-            breakoutBehavior.moveCollisionBoundaryOfViewFrame(paddleIdentifier, viewItem: paddleView)
-            }
-        
-        default:
-            break
         }
     }
+    
+    
 }
 

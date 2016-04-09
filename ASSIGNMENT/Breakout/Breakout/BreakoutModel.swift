@@ -32,6 +32,12 @@ class BreakoutModel {
     var bricksCornerRadius : CGFloat = 7
     var widthRatioatioOfBricksOverContainer = 0.8
     
+    enum ControlMode {
+        case gesture, motion
+    }
+    
+    var controlMode :ControlMode = .motion
+    
     var bounciness : Float{
         return defaults.floatForKey(DefaultsKeys.bounciness)
     }
