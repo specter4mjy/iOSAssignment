@@ -82,12 +82,10 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        gameStart = false
-        setupPaddleView()
-        setupBallView()
-        setupBrickes()
-
+        initGame()
     }
+    
+    
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
@@ -104,6 +102,19 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         }
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        motionManager.stopDeviceMotionUpdates()
+        breakoutBehavior.removeItem(ballView)
+    }
+    
+    private func initGame(){
+        gameStart = false
+        setupPaddleView()
+        setupBallView()
+        setupBrickes()
+    }
     
     private func setupBrickes(){
         let maximumBricksCount = breakoutModel.numberOfBricksPerRow * BreakoutModel.maximumOfBrickRow
@@ -153,7 +164,7 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
             breakoutBehavior.removeItem(ballView)
         }
         let size = breakoutModel.ballSize
-        let origin = CGPoint(x: gameView.bounds.midX - size.width / 2,
+        let origin = CGPoint(x: paddleView.center.x - size.width / 2,
                              y: paddleView.frame.origin.y - size.height)
         let rect = CGRect(origin: origin, size: size)
         ballView = UIImageView(frame: rect)
@@ -229,7 +240,12 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     
     // callback when player success to break all bricks
     func gameComplete(){
-       print("Congratuation!")
+        let alert =  UIAlertController(title: nil, message: "Congratuation!", preferredStyle: .Alert)
+        let action = UIAlertAction(title: "OK", style: .Cancel){ _ in
+            self.initGame()
+        }
+        alert.addAction(action)
+        presentViewController(alert, animated: true, completion: nil)
     }
     
     @IBAction func tapGestureHandler(sender: UITapGestureRecognizer) {

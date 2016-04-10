@@ -55,6 +55,7 @@ class BreakoutBehavior: UIDynamicBehavior {
         itemBehavior.removeItem(viewItem)
     }
     
+    
     func addCollisionBoundaryOfViewFrame( identifier: String, viewItem: UIView){
         let path = UIBezierPath(rect: viewItem.frame)
         collisionBehavior.addBoundaryWithIdentifier(identifier, forPath: path)

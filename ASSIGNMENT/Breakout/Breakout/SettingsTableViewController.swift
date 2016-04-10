@@ -23,6 +23,7 @@ class SettingsTableViewController: UITableViewController {
     private var bricksRowsCount = 1 {
         didSet{
             bricksRowsCountLabel.text = bricksRowsCount.description
+            bricksRowsStepper.value = Double(bricksRowsCount)
         }
     }
     
