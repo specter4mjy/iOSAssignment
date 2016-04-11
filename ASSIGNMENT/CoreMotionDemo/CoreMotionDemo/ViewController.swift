@@ -50,9 +50,17 @@ class ViewController: UIViewController {
             print("pitch \(pitch * 180 / M_PI) roll \(roll * 180 / M_PI) yaw \(yaw * 180 / M_PI) ")
             
             
-            cubeNode.eulerAngles.x = Float(pitch)
-            cubeNode.eulerAngles.y = Float(yaw)
-            cubeNode.eulerAngles.z = -Float(roll)
+            // useing eulerAngle
+//            cubeNode.eulerAngles.x = Float(pitch)
+//            cubeNode.eulerAngles.y = Float(yaw)
+//            cubeNode.eulerAngles.z = -Float(roll)
+            
+            // using quaternion
+            let x = data!.attitude.quaternion.x
+            let y = data!.attitude.quaternion.y
+            let z = data!.attitude.quaternion.z
+            let w = data!.attitude.quaternion.w
+            cubeNode.orientation = SCNQuaternion(x, y, z, w)
             
         }
         
