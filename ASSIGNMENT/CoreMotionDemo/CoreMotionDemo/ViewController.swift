@@ -11,6 +11,14 @@ import SceneKit
 
 class ViewController: UIViewController {
 
+    let manager = AppDelegate.Motion.manager
+    
+    var cubeNode: SCNNode = {
+        let cube = SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0)
+        let node = SCNNode(geometry: cube)
+        return node
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,14 +40,17 @@ class ViewController: UIViewController {
         lightNode.light = light
         lightNode.position = SCNVector3(x: 1.5, y: 1.5, z: 1.5)
         
-        let cube = SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0)
-        let cubeNode = SCNNode(geometry: cube)
         
         scene.rootNode.addChildNode(lightNode)
         scene.rootNode.addChildNode(cameraNode)
         scene.rootNode.addChildNode(cubeNode)
         
-        let manager = AppDelegate.Motion.manager
+        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
         manager.deviceMotionUpdateInterval = 0.01
         manager.startDeviceMotionUpdatesToQueue(NSOperationQueue.mainQueue())
         { (data, _) in
@@ -51,19 +62,24 @@ class ViewController: UIViewController {
             
             
             // useing eulerAngle
-//            cubeNode.eulerAngles.x = Float(pitch)
-//            cubeNode.eulerAngles.y = Float(yaw)
-//            cubeNode.eulerAngles.z = -Float(roll)
+            self.cubeNode.eulerAngles.x = Float(pitch)
+            self.cubeNode.eulerAngles.y = Float(roll)
+            self.cubeNode.eulerAngles.z = Float(yaw)
             
             // using quaternion
-            let x = data!.attitude.quaternion.x
-            let y = data!.attitude.quaternion.y
-            let z = data!.attitude.quaternion.z
-            let w = data!.attitude.quaternion.w
-            cubeNode.orientation = SCNQuaternion(x, y, z, w)
+//            let x = data!.attitude.quaternion.x
+//            let y = data!.attitude.quaternion.y
+//            let z = data!.attitude.quaternion.z
+//            let w = data!.attitude.quaternion.w
+//            self.cubeNode.orientation = SCNQuaternion(x, y, z, w)
             
         }
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
         
+        manager.stopDeviceMotionUpdates()
     }
     
 
