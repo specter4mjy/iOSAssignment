@@ -7,18 +7,34 @@
 //
 
 import UIKit
+import WatchConnectivity
 
-class ViewController: UIViewController {
+class ViewController: UIViewController,WCSessionDelegate {
 
+    @IBOutlet weak var countLabel: UILabel!
+    private var session :WCSession?
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        
+        if WCSession.isSupported(){
+            session = WCSession.defaultSession()
+            session!.delegate = self
+            session!.activateSession()
+        }
+        
+    }
+    
+    func session(session: WCSession, didReceiveMessage message: [String : AnyObject]) {
+        if let countValue = message["count"] as? String{
+            dispatch_sync(dispatch_get_main_queue(), {
+                self.countLabel.text = countValue
+                print(message)
+            })
+        }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 
 
 }
