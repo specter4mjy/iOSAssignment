@@ -20,11 +20,7 @@ class BreakoutBehavior: UIDynamicBehavior {
         }
     }
     
-    private lazy var collisionBehavior : UICollisionBehavior  = {
-       var collisionBehavior = UICollisionBehavior()
-        collisionBehavior.translatesReferenceBoundsIntoBoundary = true
-        return collisionBehavior
-    }()
+    private lazy var collisionBehavior = UICollisionBehavior()
     
     private lazy var itemBehavior : UIDynamicItemBehavior = {
         let itemBehavior = UIDynamicItemBehavior()
@@ -54,6 +50,9 @@ class BreakoutBehavior: UIDynamicBehavior {
         itemBehavior.removeItem(viewItem)
     }
     
+    func addCollisionBoundaryWithIdentifier(identifier: String, fromPoint: CGPoint, toPoint: CGPoint){
+        collisionBehavior.addBoundaryWithIdentifier(identifier, fromPoint: fromPoint, toPoint: toPoint)
+    }
     
     func addCollisionBoundaryOfViewFrame( identifier: String, viewItem: UIView){
         let path = UIBezierPath(rect: viewItem.frame)

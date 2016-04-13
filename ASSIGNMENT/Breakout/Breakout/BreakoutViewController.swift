@@ -85,7 +85,26 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         super.viewDidAppear(animated)
         
         initGame()
+        setupGameViewBoundaries()
+        startMotionManager()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
         
+        removeGameViewBoundaries()
+        removeAllBallViews()
+        motionManager.stopDeviceMotionUpdates()
+    }
+    
+    private func initGame(){
+        gameStart = false
+        setupPaddleView()
+        setupBallView()
+        setupBrickes()
+    }
+    
+    private func startMotionManager(){
         motionManager.deviceMotionUpdateInterval = motionUpdateInterval
         motionManager.startDeviceMotionUpdatesToQueue(NSOperationQueue.mainQueue())
         { (data, _) in
@@ -96,20 +115,6 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
                     self.xOfPaddle = self.gameView.center.x + 4 * deviceAngle
             }
         }
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        motionManager.stopDeviceMotionUpdates()
-        removeAllBallViews()
-    }
-    
-    private func initGame(){
-        gameStart = false
-        setupPaddleView()
-        setupBallView()
-        setupBrickes()
     }
     
     private func setupBrickes(){
@@ -202,6 +207,20 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         gameView.addSubview(paddleView)
         breakoutBehavior.addCollisionBoundaryOfViewFrame(paddleIdentifier,
                                                          viewItem: paddleView)
+    }
+    
+    private func setupGameViewBoundaries(){
+        let height = gameView.bounds.height
+        let width = gameView.bounds.width
+        breakoutBehavior.addCollisionBoundaryWithIdentifier("left", fromPoint: CGPoint(x: 0,y: 0), toPoint: CGPoint(x: 0,y: height))
+        breakoutBehavior.addCollisionBoundaryWithIdentifier("top", fromPoint: CGPoint(x: 0,y: 0), toPoint: CGPoint(x: width,y: 0))
+        breakoutBehavior.addCollisionBoundaryWithIdentifier("right", fromPoint: CGPoint(x: width,y: 0), toPoint: CGPoint(x: width,y: height))
+    }
+    
+    private func removeGameViewBoundaries(){
+        breakoutBehavior.removeCollisonBoundaryWithIdentifier("left")
+        breakoutBehavior.removeCollisonBoundaryWithIdentifier("top")
+        breakoutBehavior.removeCollisonBoundaryWithIdentifier("right")
     }
     
     func collisionBehavior(behavior: UICollisionBehavior, beganContactForItem item: UIDynamicItem, withBoundaryIdentifier identifier: NSCopying?, atPoint p: CGPoint) {
