@@ -8,18 +8,33 @@
 
 import UIKit
 
+enum ControlMode: Int{
+    case panGesture = 1
+    case attitude = 2
+}
+
+struct DefaultsKeys{
+    static let rowsCount = "rowsCount"
+    static let ballsCount = "ballsCount"
+    static let bounciness = "bounciness"
+    static let controlMode = "controlMode"
+}
+
 class SettingsTableViewController: UITableViewController {
 
     @IBOutlet weak var ballsCountSegment: UISegmentedControl!
     @IBOutlet weak var bricksRowsCountLabel: UILabel!
     @IBOutlet weak var bricksRowsStepper: UIStepper!
     @IBOutlet weak var bouncinessSlider: UISlider!
+    @IBOutlet weak var controlModeSegment: UISegmentedControl!
     
     private var ballCount = 1 {
         didSet{
-            ballsCountSegment.selectedSegmentIndex = ballCount
+            ballsCountSegment.selectedSegmentIndex = ballCount - 1
         }
     }
+    
+    
     private var bricksRowsCount = 1 {
         didSet{
             bricksRowsCountLabel.text = bricksRowsCount.description
@@ -33,6 +48,11 @@ class SettingsTableViewController: UITableViewController {
         }
     }
     
+    private var controlMode = ControlMode.attitude {
+        didSet{
+            controlModeSegment.selectedSegmentIndex = controlMode.rawValue - 1
+        }
+    }
     
     private let defaults = NSUserDefaults.standardUserDefaults()
     
@@ -60,11 +80,15 @@ class SettingsTableViewController: UITableViewController {
             bouncinessValue = defaultBouncinessValue
         }
         
+        let defaultControlMode = defaults.integerForKey(DefaultsKeys.controlMode)
+        if defaultControlMode != 0 {
+            controlMode = ControlMode(rawValue: defaultControlMode)!
+        }
     }
     
     private func setupBouncinessSlider(){
-        bouncinessSlider.minimumValue = 0.0
-        bouncinessSlider.maximumValue = 1.0
+        bouncinessSlider.minimumValue = 0.1
+        bouncinessSlider.maximumValue = 0.5
     }
     
     private func setupBrickRowsStepper(){
@@ -75,7 +99,7 @@ class SettingsTableViewController: UITableViewController {
         bricksRowsStepper.wraps = true
     }
     @IBAction func changeBallsCount(sender: UISegmentedControl) {
-        let count  = sender.selectedSegmentIndex
+        let count  = sender.selectedSegmentIndex + 1
         defaults.setInteger(count, forKey: DefaultsKeys.ballsCount)
     }
     @IBAction func changeBricksRowsCount(sender: UIStepper) {
@@ -85,5 +109,9 @@ class SettingsTableViewController: UITableViewController {
     @IBAction func changeBounciness(sender: UISlider) {
         bouncinessValue = sender.value
         defaults.setFloat(bouncinessValue, forKey: DefaultsKeys.bounciness)
+    }
+    @IBAction func changeControlMode(sender: UISegmentedControl) {
+        let mode = sender.selectedSegmentIndex + 1
+        defaults.setInteger(mode, forKey: DefaultsKeys.controlMode)
     }
 }

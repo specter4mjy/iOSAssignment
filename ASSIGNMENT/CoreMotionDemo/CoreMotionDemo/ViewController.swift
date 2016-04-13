@@ -62,16 +62,16 @@ class ViewController: UIViewController {
             
             
             // useing eulerAngle
-            self.cubeNode.eulerAngles.x = Float(pitch)
-            self.cubeNode.eulerAngles.y = Float(roll)
-            self.cubeNode.eulerAngles.z = Float(yaw)
+//            self.cubeNode.eulerAngles.x = Float(pitch)
+//            self.cubeNode.eulerAngles.y = Float(roll)
+//            self.cubeNode.eulerAngles.z = Float(yaw)
             
             // using quaternion
-//            let x = data!.attitude.quaternion.x
-//            let y = data!.attitude.quaternion.y
-//            let z = data!.attitude.quaternion.z
-//            let w = data!.attitude.quaternion.w
-//            self.cubeNode.orientation = SCNQuaternion(x, y, z, w)
+            let x = data!.attitude.quaternion.x
+            let y = data!.attitude.quaternion.y
+            let z = data!.attitude.quaternion.z
+            let w = data!.attitude.quaternion.w
+            self.cubeNode.orientation = SCNQuaternion(x, y, z, w)
             
         }
     }

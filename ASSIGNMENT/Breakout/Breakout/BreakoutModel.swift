@@ -24,7 +24,9 @@ class BreakoutModel {
     
     var numberOfBricksPerRow = 4
     var numberOfBrickRows : Int {
-        return defaults.integerForKey(DefaultsKeys.rowsCount)
+        var defaultRowCount =  defaults.integerForKey(DefaultsKeys.rowsCount)
+        defaultRowCount = defaultRowCount == 0 ? 4 : defaultRowCount
+        return defaultRowCount
     }
     var brickHeight: CGFloat = 20
     var bricksDistanceToTop : CGFloat = 30
@@ -32,14 +34,17 @@ class BreakoutModel {
     var bricksCornerRadius : CGFloat = 7
     var widthRatioatioOfBricksOverContainer = 0.8
     
-    enum ControlMode {
-        case gesture, motion
+    
+    var controlMode :ControlMode {
+        var rawValue = defaults.integerForKey(DefaultsKeys.controlMode)
+        rawValue = rawValue == 0 ? 1 : rawValue
+        return ControlMode(rawValue: rawValue)!
     }
     
-    var controlMode :ControlMode = .motion
-    
     var bounciness : Float{
-        return defaults.floatForKey(DefaultsKeys.bounciness)
+        var defaultValue = defaults.floatForKey(DefaultsKeys.bounciness)
+        defaultValue = defaultValue == 0.0 ? 0.5 : defaultValue
+        return defaultValue
     }
     
     var numberOfTotalBricks : Int  {

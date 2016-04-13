@@ -93,7 +93,7 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         motionManager.deviceMotionUpdateInterval = motionUpdateInterval
         motionManager.startDeviceMotionUpdatesToQueue(NSOperationQueue.mainQueue())
         { (data, _) in
-            if self.breakoutModel.controlMode == .motion{
+            if self.breakoutModel.controlMode == ControlMode.attitude{
                 let gravity = (data!.gravity)
                 let deviceAngle =  CGFloat(-atan(gravity.x / gravity.y) * 180 / M_PI )
                 
@@ -261,7 +261,7 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         }
     }
     @IBAction func panGestureHandler(sender: UIPanGestureRecognizer) {
-        if breakoutModel.controlMode == .gesture{
+        if breakoutModel.controlMode == ControlMode.panGesture{
             switch sender.state {
             case .Began:
                 fallthrough

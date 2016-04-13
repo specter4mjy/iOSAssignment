@@ -172,6 +172,36 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection headerTitle="Control Mode" id="LqM-tO-bNm">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="pgY-Da-zJA">
+                                        <rect key="frame" x="0.0" y="335" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pgY-Da-zJA" id="iVT-SC-OFp">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="nS3-Ml-m70">
+                                                    <rect key="frame" x="8" y="8" width="584" height="28"/>
+                                                    <segments>
+                                                        <segment title="Pan Gesture"/>
+                                                        <segment title="Attitude"/>
+                                                    </segments>
+                                                    <connections>
+                                                        <action selector="changeControlMode:" destination="3Nl-kJ-fg8" eventType="valueChanged" id="YLC-dL-bMG"/>
+                                                    </connections>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="nS3-Ml-m70" secondAttribute="trailing" id="J0M-4w-OSn"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="nS3-Ml-m70" secondAttribute="bottom" id="Jmc-yV-Nls"/>
+                                                <constraint firstAttribute="topMargin" secondItem="nS3-Ml-m70" secondAttribute="top" id="Mqm-mS-ZlX"/>
+                                                <constraint firstItem="nS3-Ml-m70" firstAttribute="leading" secondItem="iVT-SC-OFp" secondAttribute="leadingMargin" id="koX-NQ-28m"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="3Nl-kJ-fg8" id="HSI-4X-pYt"/>
@@ -184,6 +214,7 @@
                         <outlet property="bouncinessSlider" destination="hkJ-JY-N0P" id="cuM-Se-V3X"/>
                         <outlet property="bricksRowsCountLabel" destination="djS-1L-wqg" id="4ow-bP-Gub"/>
                         <outlet property="bricksRowsStepper" destination="eSc-VN-gt8" id="fIQ-IW-88a"/>
+                        <outlet property="controlModeSegment" destination="nS3-Ml-m70" id="Bdp-Ry-Ytr"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D1s-zK-zI8" userLabel="First Responder" sceneMemberID="firstResponder"/>
