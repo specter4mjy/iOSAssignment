@@ -44,7 +44,6 @@ class BreakoutBehavior: UIDynamicBehavior {
     }
     
     func addItem(viewItem: UIView) {
-        dynamicAnimator?.referenceView?.addSubview(viewItem)
         collisionBehavior.addItem(viewItem)
         itemBehavior.addItem(viewItem)
     }

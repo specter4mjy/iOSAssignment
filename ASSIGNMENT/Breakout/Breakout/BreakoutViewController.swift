@@ -17,11 +17,13 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     
     let breakoutModel = BreakoutModel()
     
-    private var ballView : UIImageView!
+    var ballCount = 0
+    var pushCount = 0
     
     private var paddleView : UIImageView!
     
     let paddleIdentifier = "paddle"
+    
 
     @IBOutlet weak var gameView: UIView!
     
@@ -79,16 +81,10 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     
     
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        initGame()
-    }
-    
-    
-    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
+        initGame()
         
         motionManager.deviceMotionUpdateInterval = motionUpdateInterval
         motionManager.startDeviceMotionUpdatesToQueue(NSOperationQueue.mainQueue())
@@ -106,7 +102,7 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         super.viewWillDisappear(animated)
         
         motionManager.stopDeviceMotionUpdates()
-        breakoutBehavior.removeItem(ballView)
+        removeAllBallViews()
     }
     
     private func initGame(){
@@ -160,18 +156,32 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     }
     
     private func setupBallView() {
-        if ballView != nil {
-            breakoutBehavior.removeItem(ballView)
+        removeAllBallViews()
+        addABall()
+    }
+    
+    private func removeAllBallViews(){
+        for i in breakoutModel.minOfBallViewTag...breakoutModel.maxOfBallViewTag{
+            if let ballView = gameView.viewWithTag(i){
+                breakoutBehavior.removeItem(ballView)
+            }
         }
+        ballCount = 0
+    }
+    
+    private func addABall(){
+        
         let size = breakoutModel.ballSize
         let origin = CGPoint(x: paddleView.center.x - size.width / 2,
                              y: paddleView.frame.origin.y - size.height)
         let rect = CGRect(origin: origin, size: size)
-        ballView = UIImageView(frame: rect)
+        let ballView = UIImageView(frame: rect)
+        ballCount += 1
+        ballView.tag = breakoutModel.baseOfBallViewTag + ballCount
         ballView.image = UIImage(named: "ball")
         ballView.layer.cornerRadius = min(size.height, size.width) / 2
         ballView.layer.masksToBounds = true
-        breakoutBehavior.addItem(ballView)
+        gameView.addSubview(ballView)
     }
     
     private func setupPaddleView(){
@@ -193,9 +203,6 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         breakoutBehavior.addCollisionBoundaryOfViewFrame(paddleIdentifier,
                                                          viewItem: paddleView)
     }
-    
-    
-    
     
     func collisionBehavior(behavior: UICollisionBehavior, beganContactForItem item: UIDynamicItem, withBoundaryIdentifier identifier: NSCopying?, atPoint p: CGPoint) {
         if let boundaryIdentifier = identifier as? String{
@@ -250,14 +257,25 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     
     @IBAction func tapGestureHandler(sender: UITapGestureRecognizer) {
         if sender.state == .Ended{
-            let pushBehavior = UIPushBehavior(items: [ballView], mode: .Instantaneous)
-            let pushMagnitude = CGFloat(breakoutModel.bounciness)
-            pushBehavior.setAngle(CGFloat(-M_PI_4), magnitude: pushMagnitude)
-            pushBehavior.action = { [unowned pushBehavior] in
-                self.dynamicAnimator.removeBehavior(pushBehavior)
+            if gameStart == false{
+                gameStart = true
+                pushCount = 0
             }
-            dynamicAnimator.addBehavior(pushBehavior)
-            gameStart = true
+            if pushCount < breakoutModel.ballCount{
+                let ballView = gameView.viewWithTag(breakoutModel.baseOfBallViewTag + ballCount)!
+                let pushBehavior = UIPushBehavior(items: [ballView], mode: .Instantaneous)
+                let pushMagnitude = CGFloat(breakoutModel.bounciness)
+                pushBehavior.setAngle(CGFloat(-M_PI_4), magnitude: pushMagnitude)
+                pushBehavior.action = { [unowned pushBehavior] in
+                    self.dynamicAnimator.removeBehavior(pushBehavior)
+                }
+                dynamicAnimator.addBehavior(pushBehavior)
+                breakoutBehavior.addItem(ballView)
+                if ballCount < breakoutModel.ballCount{
+                    addABall()
+                }
+            }
+            pushCount += 1
         }
     }
     @IBAction func panGestureHandler(sender: UIPanGestureRecognizer) {

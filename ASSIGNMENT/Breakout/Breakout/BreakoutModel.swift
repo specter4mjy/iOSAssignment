@@ -11,6 +11,7 @@ import UIKit
 class BreakoutModel {
     
     static let maximumOfBrickRow = 8
+    static let maximumOfBallCount = 5
     
     private let defaults = NSUserDefaults.standardUserDefaults()
     
@@ -20,6 +21,14 @@ class BreakoutModel {
     var paddleDistanceToBottom : CGFloat = 30
     var paddleCornerRadius : CGFloat {
         return paddleSize.height / 2
+    }
+    
+    let baseOfBallViewTag = 100
+    var minOfBallViewTag : Int{
+        return baseOfBallViewTag + 1
+    }
+    var maxOfBallViewTag : Int{
+        return baseOfBallViewTag + BreakoutModel.maximumOfBallCount
     }
     
     var numberOfBricksPerRow = 4
@@ -39,6 +48,12 @@ class BreakoutModel {
         var rawValue = defaults.integerForKey(DefaultsKeys.controlMode)
         rawValue = rawValue == 0 ? 1 : rawValue
         return ControlMode(rawValue: rawValue)!
+    }
+    
+    var ballCount: Int{
+        var defaultBallCount =  defaults.integerForKey(DefaultsKeys.ballsCount)
+        defaultBallCount = defaultBallCount == 0 ? 1 : defaultBallCount
+        return defaultBallCount
     }
     
     var bounciness : Float{
