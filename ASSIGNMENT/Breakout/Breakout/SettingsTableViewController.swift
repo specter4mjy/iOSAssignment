@@ -35,14 +35,14 @@ class SettingsTableViewController: UITableViewController {
     }
     
     
-    private var bricksRowsCount = 1 {
+    private var bricksRowsCount = 4 {
         didSet{
             bricksRowsCountLabel.text = bricksRowsCount.description
             bricksRowsStepper.value = Double(bricksRowsCount)
         }
     }
     
-    private var bouncinessValue : Float = 0.5 {
+    private var bouncinessValue : Float = 0.3 {
         didSet{
             bouncinessSlider.setValue(bouncinessValue, animated: true)
         }
@@ -70,19 +70,31 @@ class SettingsTableViewController: UITableViewController {
         if defaultBallCount != 0 {
             ballCount = defaultBallCount
         }
+        else {
+            ballCount = 1
+        }
         
         let defaultRowsCount = defaults.integerForKey(DefaultsKeys.rowsCount)
         if defaultRowsCount != 0 {
             bricksRowsCount = defaultRowsCount
         }
+        else{
+            bricksRowsCount = 4
+        }
         let defaultBouncinessValue = defaults.floatForKey(DefaultsKeys.bounciness)
         if defaultBouncinessValue != 0 {
             bouncinessValue = defaultBouncinessValue
+        }
+        else{
+            bouncinessValue = 0.3
         }
         
         let defaultControlMode = defaults.integerForKey(DefaultsKeys.controlMode)
         if defaultControlMode != 0 {
             controlMode = ControlMode(rawValue: defaultControlMode)!
+        }
+        else{
+            controlMode = .panGesture
         }
     }
     

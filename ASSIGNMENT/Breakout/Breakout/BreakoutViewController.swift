@@ -13,16 +13,17 @@ import CoreMotion
 class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     
     
-    private var gameStart = false
     
     let breakoutModel = BreakoutModel()
     
-    var ballCount = 0
+    var addedBallCount = 0
+    var losedBallCount = 0
     var pushCount = 0
     
     private var paddleView : UIImageView!
     
     let paddleIdentifier = "paddle"
+    let outOfWindowBoundaryIdentifier = "outBottom"
     
 
     @IBOutlet weak var gameView: UIView!
@@ -41,20 +42,18 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
             return self.paddleView.center.x
         }
         set{
-            if gameStart == true {
-                let oldValue = self.paddleView.center.x
-                if ( newValue > paddleView.bounds.size.width / 2
-                    && newValue < gameView.bounds.width - paddleView.bounds.size.width / 2 ){
-                    movePaddleViewWithAnimationTo(newValue)
-                }
-                else if( oldValue > paddleView.bounds.size.width / 2
-                    && newValue <= paddleView.bounds.size.width / 2){
-                    movePaddleViewWithAnimationTo(self.paddleView.bounds.size.width / 2)
-                }
-                else if( oldValue < gameView.bounds.width - paddleView.bounds.size.width / 2
-                    && newValue >=  gameView.bounds.width - paddleView.bounds.size.width / 2){
-                    movePaddleViewWithAnimationTo(self.gameView.bounds.width - self.paddleView.bounds.size.width / 2)
-                }
+            let oldValue = self.paddleView.center.x
+            if ( newValue > paddleView.bounds.size.width / 2
+                && newValue < gameView.bounds.width - paddleView.bounds.size.width / 2 ){
+                movePaddleAndBallWithAnimationTo(newValue)
+            }
+            else if( oldValue > paddleView.bounds.size.width / 2
+                && newValue <= paddleView.bounds.size.width / 2){
+                movePaddleAndBallWithAnimationTo(self.paddleView.bounds.size.width / 2)
+            }
+            else if( oldValue < gameView.bounds.width - paddleView.bounds.size.width / 2
+                && newValue >=  gameView.bounds.width - paddleView.bounds.size.width / 2){
+                movePaddleAndBallWithAnimationTo(self.gameView.bounds.width - self.paddleView.bounds.size.width / 2)
             }
         }
     }
@@ -85,23 +84,21 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         super.viewDidAppear(animated)
         
         initGame()
-        setupGameViewBoundaries()
         startMotionManager()
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        removeGameViewBoundaries()
         removeAllBallViews()
         motionManager.stopDeviceMotionUpdates()
     }
     
     private func initGame(){
-        gameStart = false
         setupPaddleView()
         setupBallView()
         setupBrickes()
+        setupGameViewBoundaries()
     }
     
     private func startMotionManager(){
@@ -153,9 +150,14 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         }
     }
     
-    private func movePaddleViewWithAnimationTo( x: CGFloat){
+    private func movePaddleAndBallWithAnimationTo( x: CGFloat){
         UIView.animateWithDuration(motionUpdateInterval, animations: {
             self.paddleView.center.x = x
+            if self.pushCount < self.breakoutModel.ballCount{
+                if let ballView = self.gameView.viewWithTag(self.breakoutModel.baseOfBallViewTag + self.addedBallCount){
+                    ballView.center.x = x
+                }
+            }
         })
         breakoutBehavior.moveCollisionBoundaryOfViewFrame(paddleIdentifier, viewItem: paddleView)
     }
@@ -171,7 +173,9 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
                 breakoutBehavior.removeItem(ballView)
             }
         }
-        ballCount = 0
+        addedBallCount = 0
+        losedBallCount = 0
+        pushCount = 0
     }
     
     private func addABall(){
@@ -181,8 +185,8 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
                              y: paddleView.frame.origin.y - size.height)
         let rect = CGRect(origin: origin, size: size)
         let ballView = UIImageView(frame: rect)
-        ballCount += 1
-        ballView.tag = breakoutModel.baseOfBallViewTag + ballCount
+        addedBallCount += 1
+        ballView.tag = breakoutModel.baseOfBallViewTag + addedBallCount
         ballView.image = UIImage(named: "ball")
         ballView.layer.cornerRadius = min(size.height, size.width) / 2
         ballView.layer.masksToBounds = true
@@ -210,21 +214,28 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     }
     
     private func setupGameViewBoundaries(){
-        let height = gameView.bounds.height
+        // let heigth longer than visible area
+        let height = gameView.bounds.height + breakoutModel.ballSize.height
         let width = gameView.bounds.width
         breakoutBehavior.addCollisionBoundaryWithIdentifier("left", fromPoint: CGPoint(x: 0,y: 0), toPoint: CGPoint(x: 0,y: height))
         breakoutBehavior.addCollisionBoundaryWithIdentifier("top", fromPoint: CGPoint(x: 0,y: 0), toPoint: CGPoint(x: width,y: 0))
         breakoutBehavior.addCollisionBoundaryWithIdentifier("right", fromPoint: CGPoint(x: width,y: 0), toPoint: CGPoint(x: width,y: height))
+        // when ball hit the outBottom means it is out of the window
+        breakoutBehavior.addCollisionBoundaryWithIdentifier(outOfWindowBoundaryIdentifier, fromPoint: CGPoint(x: 0,y: height), toPoint: CGPoint(x: width,y: height))
     }
     
-    private func removeGameViewBoundaries(){
-        breakoutBehavior.removeCollisonBoundaryWithIdentifier("left")
-        breakoutBehavior.removeCollisonBoundaryWithIdentifier("top")
-        breakoutBehavior.removeCollisonBoundaryWithIdentifier("right")
-    }
     
     func collisionBehavior(behavior: UICollisionBehavior, beganContactForItem item: UIDynamicItem, withBoundaryIdentifier identifier: NSCopying?, atPoint p: CGPoint) {
         if let boundaryIdentifier = identifier as? String{
+            if boundaryIdentifier == outOfWindowBoundaryIdentifier{
+                // a ball out of the window
+                let ballView = item as! UIView
+                breakoutBehavior.removeItem(ballView)
+                losedBallCount += 1
+                if losedBallCount == addedBallCount {
+                    gameOver()
+                }
+            }
             if let brickIndex = Int(boundaryIdentifier){
                 if hitBricks.contains(brickIndex){
                     return
@@ -264,8 +275,19 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
         }
     }
     
+    func gameOver(){
+        removeAllBallViews()
+        let alert =  UIAlertController(title: nil, message: "GameOver!", preferredStyle: .Alert)
+        let action = UIAlertAction(title: "Play Again", style: .Default){ _ in
+            self.initGame()
+        }
+        alert.addAction(action)
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    
     // callback when player success to break all bricks
     func gameComplete(){
+        removeAllBallViews()
         let alert =  UIAlertController(title: nil, message: "Congratuation!", preferredStyle: .Alert)
         let action = UIAlertAction(title: "OK", style: .Cancel){ _ in
             self.initGame()
@@ -276,21 +298,17 @@ class BreakoutViewController: UIViewController, UICollisionBehaviorDelegate {
     
     @IBAction func tapGestureHandler(sender: UITapGestureRecognizer) {
         if sender.state == .Ended{
-            if gameStart == false{
-                gameStart = true
-                pushCount = 0
-            }
             if pushCount < breakoutModel.ballCount{
-                let ballView = gameView.viewWithTag(breakoutModel.baseOfBallViewTag + ballCount)!
-                let pushBehavior = UIPushBehavior(items: [ballView], mode: .Instantaneous)
-                let pushMagnitude = CGFloat(breakoutModel.bounciness)
-                pushBehavior.setAngle(CGFloat(-M_PI_4), magnitude: pushMagnitude)
-                pushBehavior.action = { [unowned pushBehavior] in
-                    self.dynamicAnimator.removeBehavior(pushBehavior)
-                }
-                dynamicAnimator.addBehavior(pushBehavior)
-                breakoutBehavior.addItem(ballView)
-                if ballCount < breakoutModel.ballCount{
+                if let ballView = gameView.viewWithTag(breakoutModel.baseOfBallViewTag + addedBallCount){
+                    let pushBehavior = UIPushBehavior(items: [ballView], mode: .Instantaneous)
+                    let pushMagnitude = CGFloat(breakoutModel.bounciness)
+                    pushBehavior.setAngle(CGFloat(-M_PI_4), magnitude: pushMagnitude)
+                    pushBehavior.action = { [unowned pushBehavior] in
+                        self.dynamicAnimator.removeBehavior(pushBehavior)
+                    }
+                    dynamicAnimator.addBehavior(pushBehavior)
+                    breakoutBehavior.addItem(ballView)}
+                if addedBallCount < breakoutModel.ballCount{
                     addABall()
                 }
             }

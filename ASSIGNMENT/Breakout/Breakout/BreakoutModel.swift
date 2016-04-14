@@ -58,7 +58,7 @@ class BreakoutModel {
     
     var bounciness : Float{
         var defaultValue = defaults.floatForKey(DefaultsKeys.bounciness)
-        defaultValue = defaultValue == 0.0 ? 0.5 : defaultValue
+        defaultValue = defaultValue == 0.0 ? 0.3 : defaultValue
         return defaultValue
     }
     
