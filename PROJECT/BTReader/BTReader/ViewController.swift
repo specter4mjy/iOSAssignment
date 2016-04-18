@@ -11,20 +11,22 @@ import CoreBluetooth
 
 
 
-class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralManagerDelegate {
+class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralManagerDelegate, CBPeripheralDelegate {
     
-    let myUuid = CBUUID(string: "5CB39A21-3310-4A2E-B46E-8F6F3ABDA6CD")
+    let myServiceUUID = CBUUID(string: "5CB39A21-3310-4A2E-B46E-8F6F3ABDA6CD")
+    let myCharacteristiceUUID = CBUUID(string: "72ACF398-5A19-458C-83EB-01194E1AA533")
     var myCentralManager : CBCentralManager!
     var myPeripheralManager : CBPeripheralManager!
+    var myPeripheral : CBPeripheral!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         switch UIDevice.currentDevice().userInterfaceIdiom {
         case .Phone:
-            setupPeripheral()
-        case .Pad:
             setupCentral()
+        case .Pad:
+            setupPeripheral()
         default:
             break
         }
@@ -33,7 +35,7 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralMan
     func centralManagerDidUpdateState(central: CBCentralManager) {
         if central.state == .PoweredOn{
             print("central power on")
-            myCentralManager.scanForPeripheralsWithServices([myUuid], options: nil)
+            myCentralManager.scanForPeripheralsWithServices([myServiceUUID], options: nil)
         }
         else{
             print("central not power on")
@@ -44,12 +46,13 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralMan
         if peripheral.state == .PoweredOn{
             print("peripheral power on")
             let myData = "specter".dataUsingEncoding(NSUTF8StringEncoding)
-            let myCharacteristic = CBMutableCharacteristic(type: myUuid, properties: .Read, value: myData, permissions: .Readable)
-            let myService = CBMutableService(type: myUuid, primary:true)
-            myService.characteristics?.append(myCharacteristic)
+            let myCharacteristic = CBMutableCharacteristic(type: myCharacteristiceUUID, properties: .Read, value: myData, permissions: .Readable)
+            let myService = CBMutableService(type: myServiceUUID, primary:true)
+            myService.characteristics = [myCharacteristic]
             myPeripheralManager.addService(myService)
             let advertisingData : [ String : AnyObject] = [
-                CBAdvertisementDataServiceUUIDsKey : [myUuid]
+                CBAdvertisementDataLocalNameKey : "BTReader",
+                CBAdvertisementDataServiceUUIDsKey : [myServiceUUID]
             ]
             myPeripheralManager.startAdvertising(advertisingData)
         }
@@ -76,10 +79,40 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralMan
     }
     
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
-        print(peripheral)
         print(advertisementData)
-        myCentralManager.connectPeripheral(peripheral, options: nil)
-        
+        myPeripheral = peripheral
+        central.connectPeripheral(peripheral, options: nil)
+        central.stopScan()
+        print(peripheral)
+    }
+    
+    func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+        print("peripheral connected")
+        peripheral.delegate = self
+        peripheral.discoverServices([myServiceUUID])
+    }
+    
+    func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+        for service in peripheral.services! {
+            print(service)
+            peripheral.discoverCharacteristics([myCharacteristiceUUID], forService: service)
+        }
+    }
+    
+    func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
+        print("discovered Characteristic")
+        for characteristic in service.characteristics!{
+            print(characteristic)
+            peripheral.readValueForCharacteristic(characteristic)
+        }
+    }
+    
+    func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+        if let data = characteristic.value {
+            if let stringValue = String(data: data, encoding: NSUTF8StringEncoding){
+                print(stringValue)
+            }
+        }
     }
     
     private func setupPeripheral(){
