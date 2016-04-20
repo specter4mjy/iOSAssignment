@@ -11,7 +11,7 @@ import CoreBluetooth
 
 
 
-class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralManagerDelegate, CBPeripheralDelegate {
+class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralManagerDelegate, CBPeripheralDelegate, UITextViewDelegate {
     
     let myServiceUUID = CBUUID(string: "5CB39A21-3310-4A2E-B46E-8F6F3ABDA6CD")
     let myCharacteristiceUUID = CBUUID(string: "72ACF398-5A19-458C-83EB-01194E1AA533")
@@ -19,14 +19,19 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralMan
     var myPeripheralManager : CBPeripheralManager!
     var myPeripheral : CBPeripheral!
     
+    @IBOutlet weak var iphoneTV: UITextView! {
+        didSet{
+            iphoneTV.delegate = self
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         switch UIDevice.currentDevice().userInterfaceIdiom {
         case .Phone:
-            setupCentral()
-        case .Pad:
             setupPeripheral()
+        case .Pad:
+            setupCentral()
         default:
             break
         }
@@ -120,6 +125,12 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralMan
     }
     
     
+    @IBAction func iphoneSendCurrentText(sender: UIBarButtonItem) {
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        print(iphoneTV.contentOffset)
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
