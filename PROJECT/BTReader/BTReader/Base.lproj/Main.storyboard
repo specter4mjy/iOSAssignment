@@ -294,8 +294,10 @@ As explained to the New York Times in a 1997 interview, the Macintosh turned out
                                 <exclude reference="qqs-tx-r76"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="hj7-fD-N2Q"/>
                                 <exclude reference="qRU-lg-VPE"/>
                                 <exclude reference="PDd-Dn-YvB"/>
+                                <exclude reference="Ryq-LM-4GC"/>
                                 <exclude reference="lS8-uT-Xiu"/>
                                 <exclude reference="R5h-op-Q5i"/>
                                 <exclude reference="X0c-q0-Eiu"/>
@@ -307,7 +309,9 @@ As explained to the New York Times in a 1997 interview, the Macintosh turned out
                                 <include reference="Uwj-Lx-4KJ"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="hj7-fD-N2Q"/>
                                 <include reference="PDd-Dn-YvB"/>
+                                <include reference="Ryq-LM-4GC"/>
                                 <include reference="lS8-uT-Xiu"/>
                             </mask>
                         </variation>

@@ -14,11 +14,14 @@ import CoreBluetooth
 class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralManagerDelegate, CBPeripheralDelegate, UITextViewDelegate {
     
     let myServiceUUID = CBUUID(string: "5CB39A21-3310-4A2E-B46E-8F6F3ABDA6CD")
-    let myCharacteristiceUUID = CBUUID(string: "72ACF398-5A19-458C-83EB-01194E1AA533")
+    let myIphoneScrollingPositionCharacteristicUUID = CBUUID(string: "72ACF398-5A19-458C-83EB-01194E1AA533")
+    let myIphoneContentHeightUUID = CBUUID(string: "546B3FE8-255F-4F69-A154-D3057CCF0499")
     var myCentralManager : CBCentralManager!
     var myPeripheralManager : CBPeripheralManager!
     var myPeripheral : CBPeripheral!
     var myIphoneScrollingPositionCharacteristic : CBMutableCharacteristic!
+    var myIphoneContentHeightCharacteristic : CBMutableCharacteristic!
+    var myIphoneContentHeight : CGFloat = 0
     
     @IBOutlet weak var iphoneTV: UITextView! {
         didSet{
@@ -79,18 +82,22 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralMan
     func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
         for service in peripheral.services! {
             print(service)
-            peripheral.discoverCharacteristics([myCharacteristiceUUID], forService: service)
+            peripheral.discoverCharacteristics([myIphoneScrollingPositionCharacteristicUUID,myIphoneContentHeightUUID], forService: service)
         }
     }
     
     func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
         print("discovered Characteristic")
         for characteristic in service.characteristics!{
-            print(characteristic)
-            // redaing value
-//            peripheral.readvalueforcharacteristic(characteristic)
+            switch characteristic.UUID {
+            case myIphoneContentHeightUUID:
+                peripheral.readValueForCharacteristic(characteristic)
+            case myIphoneScrollingPositionCharacteristicUUID:
+                peripheral.setNotifyValue(true, forCharacteristic: characteristic)
+            default:
+                break
+            }
             // subscribe value
-            peripheral.setNotifyValue(true, forCharacteristic: characteristic)
         }
     }
     
@@ -103,11 +110,27 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralMan
     
     func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
         if let data = characteristic.value {
-            var value : Float = 0
-            data.getBytes(&value, length: sizeof(Float))
-//            print(value)
-            let offsetPoint = CGPoint(x: 0, y: Double(value))
-            iPadTV.setContentOffset(offsetPoint, animated: false)
+            var value : Double = 0
+            data.getBytes(&value, length: sizeof(Double))
+            switch characteristic.UUID {
+            case myIphoneContentHeightUUID:
+                myIphoneContentHeight = CGFloat(value)
+            case myIphoneScrollingPositionCharacteristicUUID:
+                //            print(value)
+                if ( myIphoneContentHeight > 0){
+                    let iPadContentHeight = iPadTV.contentSize.height
+                    print(iPadContentHeight)
+                    print(value)
+                    print(iPadTV.contentOffset)
+                    let contentHeightRatio = Double(iPadContentHeight / myIphoneContentHeight)
+                    let offsetPoint = CGPoint(x: 0, y: value / contentHeightRatio)
+                    print(contentHeightRatio)
+//                    print(offsetPoint.y)
+                    iPadTV.setContentOffset(offsetPoint, animated: false)
+                }
+            default:
+                break
+            }
         }
     }
     
@@ -119,9 +142,12 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralMan
     func peripheralManagerDidUpdateState(peripheral: CBPeripheralManager) {
         if peripheral.state == .PoweredOn{
             print("peripheral power on")
-            myIphoneScrollingPositionCharacteristic = CBMutableCharacteristic(type: myCharacteristiceUUID, properties: [.Read,.Notify], value: nil, permissions: .Readable)
+            myIphoneScrollingPositionCharacteristic = CBMutableCharacteristic(type: myIphoneScrollingPositionCharacteristicUUID, properties: [.Read,.Notify], value: nil, permissions: .Readable)
+            var contentHeight = Double(iphoneTV.contentSize.height)
+            let myHeightData = NSData(bytes: &contentHeight, length: sizeof(Double))
+            myIphoneContentHeightCharacteristic = CBMutableCharacteristic(type: myIphoneContentHeightUUID, properties: .Read, value: myHeightData, permissions: .Readable)
             let myService = CBMutableService(type: myServiceUUID, primary:true)
-            myService.characteristics = [myIphoneScrollingPositionCharacteristic]
+            myService.characteristics = [myIphoneScrollingPositionCharacteristic, myIphoneContentHeightCharacteristic]
             myPeripheralManager.addService(myService)
             let advertisingData : [ String : AnyObject] = [
                 CBAdvertisementDataLocalNameKey : "BTReader",
@@ -129,7 +155,7 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralMan
             ]
             myPeripheralManager.startAdvertising(advertisingData)
         }
-        else{
+        else{1
             print("peripheral not power on")
         }
     }
@@ -155,11 +181,12 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralMan
     
     
     @IBAction func iphoneSendCurrentText(sender: UIBarButtonItem) {
+        print(iphoneTV.contentSize)
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        var floatData = Float(iphoneTV.contentOffset.y)
-        let myData = NSData(bytes: &floatData, length: sizeof(Float))
+        var floatData = Double(iphoneTV.contentOffset.y)
+        let myData = NSData(bytes: &floatData, length: sizeof(Double))
         myPeripheralManager.updateValue(myData, forCharacteristic: myIphoneScrollingPositionCharacteristic, onSubscribedCentrals: nil)
     }
     
