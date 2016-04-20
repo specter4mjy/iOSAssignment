@@ -147,25 +147,159 @@ As explained to the New York Times in a 1997 interview, the Macintosh turned out
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 </variation>
                             </textView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qqs-tx-r76">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <attributedString key="attributedText">
+                                    <fragment>
+                                        <string key="content">It now gives me great pleasure to introduce this year’s commencement speaker, Steve Jobs – the Chief Executive Officer and Co-founder of Apple and Pixar Animation Studios. Stanford University has been characterized since its founding by willingness to be bold and to strike out new directions, and this is a characteristic very much shared by today’s speaker. A pioneer and visionary for almost three decades, his name and the companies he has founded have been synonymous with innovation and creativity.
+As a young boy, growing up in Los Altos, Steve Jobs came of age at the same time as</string>
+                                        <attributes>
+                                            <color key="NSBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="deviceRGB"/>
+                                            <color key="NSColor" red="0.25098039215686274" green="0.25098039215686274" blue="0.25098039215686274" alpha="1" colorSpace="deviceRGB"/>
+                                            <font key="NSFont" size="16" name="Georgia"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="15" minimumLineHeight="18" defaultTabInterval="36" tighteningFactorForTruncation="0.0">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.25098039215686274" green="0.25098039215686274" blue="0.25098039215686274" alpha="1" colorSpace="deviceRGB"/>
+                                            <real key="NSStrokeWidth" value="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="Silicon Valley">
+                                        <attributes>
+                                            <color key="NSBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="deviceRGB"/>
+                                            <color key="NSColor" red="0.6705882352941176" green="0.15294117647058825" blue="0.074509803921568626" alpha="1" colorSpace="deviceRGB"/>
+                                            <font key="NSFont" size="16" name="Georgia"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <url key="NSLink" string="http://www.singjupost.com/secret-history-silicon-valley-steve-blank-transcript/"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="15" minimumLineHeight="18" defaultTabInterval="36" tighteningFactorForTruncation="0.0">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.6705882352941176" green="0.15294117647058825" blue="0.074509803921568626" alpha="1" colorSpace="deviceRGB"/>
+                                            <real key="NSStrokeWidth" value="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">. While still in school, he attended lectures informally at Stanford as well as at Hewlett Packard, where he spent his summer working.
+After graduating from high school, he left California to attend Reed College. A trek through India, and a short stint as video game designer for Atari followed.
+Soon after his return to the Valley in 1974 he became a regular, along with Steve Wozniak, at meetings of the Homebrew Computer Club, held at the Stanford Linear Accelerator Center. It was not long before the two of them had built the prototype for the Apple I.
+The Apple I was very fast at the time, reading and writing four kilobytes in about twenty seconds. About 20,000 times slower than we do so today.
+The Apple II was faster still, but more importantly introduced color monitors into the home market. In the mid-1980’s the Macintosh became the first truly user friendly personal computer. You didn’t have to be an expert to set it up, or to load software or to transfer information between applications. And the mouse offered point-and-click convenience, and opened the door to computer literacy for everyone.
+I still remember the amazed faces of onlookers, as they saw a computer that was completely different from the personal computers of that day.
+Steve also co-founded Pixar Animation Studios, which has revolutionized the film industry, in its short history, with a brilliant use of technology, and produced two Academy Award winning films: Toy Story and Finding Nemo.
+Since his return to Apple 8 years ago, Steve has reinvented the company once again, extending its vision to music and new digital media. iPod and iTunes have changed the way we listen to, organize, store and purchase our music. And in my case, the way I often read books.
+Now songs we love are just $0.99, and a completely legal click away. iPhoto and iMovie revolutionized the ability of consumers to organize, edit and display digital photography and video, putting capabilities that once cost thousands of dollars, into the hands of every Mac user.
+Steve is also widely recognized for his ability to create an innovative environment inside Apple, as well as an external company image that is equally innovative.
+</string>
+                                        <attributes>
+                                            <color key="NSBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="deviceRGB"/>
+                                            <color key="NSColor" red="0.25098039215686274" green="0.25098039215686274" blue="0.25098039215686274" alpha="1" colorSpace="deviceRGB"/>
+                                            <font key="NSFont" size="16" name="Georgia"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="15" minimumLineHeight="18" defaultTabInterval="36" tighteningFactorForTruncation="0.0">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.25098039215686274" green="0.25098039215686274" blue="0.25098039215686274" alpha="1" colorSpace="deviceRGB"/>
+                                            <real key="NSStrokeWidth" value="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content" base64-UTF8="YES">
+Cg
+</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.25098039215686274" green="0.25098039215686274" blue="0.25098039215686274" alpha="1" colorSpace="deviceRGB"/>
+                                            <font key="NSFont" size="16" name="Georgia"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="18" defaultTabInterval="36" tighteningFactorForTruncation="0.0">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.25098039215686274" green="0.25098039215686274" blue="0.25098039215686274" alpha="1" colorSpace="deviceRGB"/>
+                                            <real key="NSStrokeWidth" value="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">Just think about Apple’s marketing campaigns over the past three decades — a promotional flyer in 1976 showed Isaac Newton sitting under a tree just as an apple was falling by, with the catchy exhortation to byte (B-Y-T-E) into an Apple.
+There was an iconic Super Bowl commercial, [Techie Humor], an iconic Super Bowl commercial, telling us that the Macintosh was on the horizon, and assuring us that we would see why 1984 wouldn’t be like 1984.
+And in the late 1990’s we saw banners and billboards, featuring Pablo Picasso, Albert Einstein, Martha Graham, and Mahatma Gandhi all urging us to think different. Steve Jobs understands that creativity and innovation start by thinking differently. He has a deep rooted belief in the power of education to transform lives coupled with a desire to make the world a better place.
+From the earliest days of Apple, he worked to develop partnerships with educators and get computers into schools. For almost three decades, he and his companies have provided invaluable technology and supports to schools and communities increasing accessibility to information for learners of all ages.
+More than 100 years ago in describing his vision for a new university </string>
+                                        <attributes>
+                                            <color key="NSBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="deviceRGB"/>
+                                            <color key="NSColor" red="0.25098039215686274" green="0.25098039215686274" blue="0.25098039215686274" alpha="1" colorSpace="deviceRGB"/>
+                                            <font key="NSFont" size="16" name="Georgia"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="15" minimumLineHeight="18" defaultTabInterval="36" tighteningFactorForTruncation="0.0">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.25098039215686274" green="0.25098039215686274" blue="0.25098039215686274" alpha="1" colorSpace="deviceRGB"/>
+                                            <real key="NSStrokeWidth" value="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="Leland Stanford">
+                                        <attributes>
+                                            <color key="NSBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="deviceRGB"/>
+                                            <color key="NSColor" red="0.6705882352941176" green="0.15294117647058825" blue="0.074509803921568626" alpha="1" colorSpace="deviceRGB"/>
+                                            <font key="NSFont" size="16" name="Georgia"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <url key="NSLink" string="http://en.wikipedia.org/wiki/Leland_Stanford"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="15" minimumLineHeight="18" defaultTabInterval="36" tighteningFactorForTruncation="0.0">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.6705882352941176" green="0.15294117647058825" blue="0.074509803921568626" alpha="1" colorSpace="deviceRGB"/>
+                                            <real key="NSStrokeWidth" value="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">wrote: “The imagination needs to be cultivated and developed to assure success in life”. Stanford clearly understood that technical knowledge was only the starting point for creation and discovery.
+Steve Jobs understands that the computer is a very powerful tool in a technical sense, but that its true power lies in the ability to unleash the imagination and creativity of the user.
+As explained to the New York Times in a 1997 interview, the Macintosh turned out so well, because the people working on it were musicians, artists, poets, and historians, who also happened to be excellent computer scientists. And last fall a Businessweek reporter asked how he manages for innovation — his answer was deceptively simple: “We hire people who want to make the best things in the world.”
+</string>
+                                        <attributes>
+                                            <color key="NSBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="deviceRGB"/>
+                                            <color key="NSColor" red="0.25098039215686274" green="0.25098039215686274" blue="0.25098039215686274" alpha="1" colorSpace="deviceRGB"/>
+                                            <font key="NSFont" size="16" name="Georgia"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="15" minimumLineHeight="18" defaultTabInterval="36" tighteningFactorForTruncation="0.0">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.25098039215686274" green="0.25098039215686274" blue="0.25098039215686274" alpha="1" colorSpace="deviceRGB"/>
+                                            <real key="NSStrokeWidth" value="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                </variation>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="Uwj-Lx-4KJ" secondAttribute="trailing" id="PDd-Dn-YvB"/>
-                            <constraint firstItem="Uwj-Lx-4KJ" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="UHt-dI-TJd"/>
+                            <constraint firstItem="qqs-tx-r76" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="R5h-op-Q5i"/>
+                            <constraint firstItem="Uwj-Lx-4KJ" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="Ryq-LM-4GC"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="qqs-tx-r76" secondAttribute="trailing" id="X0c-q0-Eiu"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Uwj-Lx-4KJ" secondAttribute="bottom" constant="20" id="hj7-fD-N2Q"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="qqs-tx-r76" secondAttribute="leading" id="j5q-yn-iaD"/>
                             <constraint firstAttribute="leadingMargin" secondItem="Uwj-Lx-4KJ" secondAttribute="leading" id="lS8-uT-Xiu"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Uwj-Lx-4KJ" secondAttribute="bottom" constant="20" id="zR6-kK-RIa">
-                                <variation key="heightClass=regular-widthClass=compact" constant="8" symbolic="YES"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="qqs-tx-r76" secondAttribute="bottom" constant="20" id="qRU-lg-VPE">
+                                <variation key="heightClass=regular-widthClass=regular" constant="8" symbolic="YES"/>
                             </constraint>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="Uwj-Lx-4KJ"/>
+                                <exclude reference="qqs-tx-r76"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="zR6-kK-RIa"/>
+                                <exclude reference="qRU-lg-VPE"/>
                                 <exclude reference="PDd-Dn-YvB"/>
-                                <exclude reference="UHt-dI-TJd"/>
                                 <exclude reference="lS8-uT-Xiu"/>
+                                <exclude reference="R5h-op-Q5i"/>
+                                <exclude reference="X0c-q0-Eiu"/>
+                                <exclude reference="j5q-yn-iaD"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -173,10 +307,21 @@ As explained to the New York Times in a 1997 interview, the Macintosh turned out
                                 <include reference="Uwj-Lx-4KJ"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="zR6-kK-RIa"/>
                                 <include reference="PDd-Dn-YvB"/>
-                                <include reference="UHt-dI-TJd"/>
                                 <include reference="lS8-uT-Xiu"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=regular">
+                            <mask key="subviews">
+                                <include reference="qqs-tx-r76"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="hj7-fD-N2Q"/>
+                                <include reference="qRU-lg-VPE"/>
+                                <exclude reference="Ryq-LM-4GC"/>
+                                <include reference="R5h-op-Q5i"/>
+                                <include reference="X0c-q0-Eiu"/>
+                                <include reference="j5q-yn-iaD"/>
                             </mask>
                         </variation>
                     </view>
@@ -188,6 +333,7 @@ As explained to the New York Times in a 1997 interview, the Macintosh turned out
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="iPadTV" destination="qqs-tx-r76" id="iWL-84-nCr"/>
                         <outlet property="iphoneTV" destination="Uwj-Lx-4KJ" id="VKi-HM-ZSU"/>
                     </connections>
                 </viewController>
