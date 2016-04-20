@@ -15,13 +15,13 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralMan
     
     let myServiceUUID = CBUUID(string: "5CB39A21-3310-4A2E-B46E-8F6F3ABDA6CD")
     let myIphoneScrollingPositionCharacteristicUUID = CBUUID(string: "72ACF398-5A19-458C-83EB-01194E1AA533")
-    let myIphoneContentHeightUUID = CBUUID(string: "546B3FE8-255F-4F69-A154-D3057CCF0499")
+    let myIphoneContentWidthUUID = CBUUID(string: "546B3FE8-255F-4F69-A154-D3057CCF0499")
     var myCentralManager : CBCentralManager!
     var myPeripheralManager : CBPeripheralManager!
     var myPeripheral : CBPeripheral!
     var myIphoneScrollingPositionCharacteristic : CBMutableCharacteristic!
-    var myIphoneContentHeightCharacteristic : CBMutableCharacteristic!
-    var myIphoneContentHeight : CGFloat = 0
+    var myIphoneContentWidthCharacteristic : CBMutableCharacteristic!
+    var myIphoneContenWidth : CGFloat = 0
     
     @IBOutlet weak var iphoneTV: UITextView! {
         didSet{
@@ -82,7 +82,7 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralMan
     func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
         for service in peripheral.services! {
             print(service)
-            peripheral.discoverCharacteristics([myIphoneScrollingPositionCharacteristicUUID,myIphoneContentHeightUUID], forService: service)
+            peripheral.discoverCharacteristics([myIphoneScrollingPositionCharacteristicUUID,myIphoneContentWidthUUID], forService: service)
         }
     }
     
@@ -90,7 +90,7 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralMan
         print("discovered Characteristic")
         for characteristic in service.characteristics!{
             switch characteristic.UUID {
-            case myIphoneContentHeightUUID:
+            case myIphoneContentWidthUUID:
                 peripheral.readValueForCharacteristic(characteristic)
             case myIphoneScrollingPositionCharacteristicUUID:
                 peripheral.setNotifyValue(true, forCharacteristic: characteristic)
@@ -113,16 +113,16 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralMan
             var value : Double = 0
             data.getBytes(&value, length: sizeof(Double))
             switch characteristic.UUID {
-            case myIphoneContentHeightUUID:
-                myIphoneContentHeight = CGFloat(value)
+            case myIphoneContentWidthUUID:
+                myIphoneContenWidth = CGFloat(value)
             case myIphoneScrollingPositionCharacteristicUUID:
                 //            print(value)
-                if ( myIphoneContentHeight > 0){
-                    let iPadContentHeight = iPadTV.contentSize.height
-                    print(iPadContentHeight)
-                    print(value)
+                if ( myIphoneContenWidth > 0){
+                    let iPadContentWidth = iPadTV.contentSize.width
+//                    print(iPadContentWidth)
+//                    print(value)
                     print(iPadTV.contentOffset)
-                    let contentHeightRatio = Double(iPadContentHeight / myIphoneContentHeight)
+                    let contentHeightRatio = Double(iPadContentWidth / myIphoneContenWidth)
                     let offsetPoint = CGPoint(x: 0, y: value / contentHeightRatio)
                     print(contentHeightRatio)
 //                    print(offsetPoint.y)
@@ -143,11 +143,11 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralMan
         if peripheral.state == .PoweredOn{
             print("peripheral power on")
             myIphoneScrollingPositionCharacteristic = CBMutableCharacteristic(type: myIphoneScrollingPositionCharacteristicUUID, properties: [.Read,.Notify], value: nil, permissions: .Readable)
-            var contentHeight = Double(iphoneTV.contentSize.height)
+            var contentHeight = Double(iphoneTV.contentSize.width)
             let myHeightData = NSData(bytes: &contentHeight, length: sizeof(Double))
-            myIphoneContentHeightCharacteristic = CBMutableCharacteristic(type: myIphoneContentHeightUUID, properties: .Read, value: myHeightData, permissions: .Readable)
+            myIphoneContentWidthCharacteristic = CBMutableCharacteristic(type: myIphoneContentWidthUUID, properties: .Read, value: myHeightData, permissions: .Readable)
             let myService = CBMutableService(type: myServiceUUID, primary:true)
-            myService.characteristics = [myIphoneScrollingPositionCharacteristic, myIphoneContentHeightCharacteristic]
+            myService.characteristics = [myIphoneScrollingPositionCharacteristic, myIphoneContentWidthCharacteristic]
             myPeripheralManager.addService(myService)
             let advertisingData : [ String : AnyObject] = [
                 CBAdvertisementDataLocalNameKey : "BTReader",
