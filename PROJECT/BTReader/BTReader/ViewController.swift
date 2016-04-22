@@ -155,7 +155,7 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate, CBCentralMan
             ]
             myPeripheralManager.startAdvertising(advertisingData)
         }
-        else{1
+        else{
             print("peripheral not power on")
         }
     }
