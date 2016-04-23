@@ -12,10 +12,10 @@ import CoreBluetooth
 class ViewController: UIViewController,CBPeripheralManagerDelegate {
     let myServiceUUID = CBUUID(string: "5CB39A21-3310-4A2E-B46E-8F6F3ABDA6CD")
     let cursorPositionUUID = CBUUID(string: "72ACF398-5A19-458C-83EB-01194E1AA533")
-    let yOfPointUUID = CBUUID(string: "546B3FE8-255F-4F69-A154-D3057CCF0499")
+    let arrowKeyUUID = CBUUID(string: "546B3FE8-255F-4F69-A154-D3057CCF0499")
     var myPeripheralManager : CBPeripheralManager!
     var cursorPositionCharacteristic : CBMutableCharacteristic!
-    var yOfPointCharacteristic : CBMutableCharacteristic!
+    var arrowKeyCharacteristic : CBMutableCharacteristic!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,12 +33,11 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         if peripheral.state == .PoweredOn{
             print("peripheral power on")
             cursorPositionCharacteristic = CBMutableCharacteristic(type: cursorPositionUUID, properties: [.Read,.Notify], value: nil, permissions: .Readable)
-            yOfPointCharacteristic = CBMutableCharacteristic(type: yOfPointUUID, properties: [.Read,.Notify], value: nil, permissions: .Readable)
+            arrowKeyCharacteristic = CBMutableCharacteristic(type: arrowKeyUUID, properties: [.Read,.Notify], value: nil, permissions: .Readable)
             let myService = CBMutableService(type: myServiceUUID, primary:true)
-            myService.characteristics = [cursorPositionCharacteristic, yOfPointCharacteristic]
+            myService.characteristics = [cursorPositionCharacteristic, arrowKeyCharacteristic]
             myPeripheralManager.addService(myService)
             let advertisingData : [ String : AnyObject] = [
-                CBAdvertisementDataLocalNameKey : "BTRemoteiOS",
                 CBAdvertisementDataServiceUUIDsKey : [myServiceUUID]
             ]
             myPeripheralManager.startAdvertising(advertisingData)
@@ -77,5 +76,11 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
 //        myPeripheralManager.updateValue(yData, forCharacteristic: yOfPointCharacteristic, onSubscribedCentrals: nil)
     }
 
+    @IBAction func arrowKeys(sender: UIButton) {
+        if let title = sender.titleLabel?.text{
+            let data = title.dataUsingEncoding(NSUTF8StringEncoding)
+            myPeripheralManager.updateValue(data!, forCharacteristic: arrowKeyCharacteristic, onSubscribedCentrals: nil)
+        }
+    }
 }
 

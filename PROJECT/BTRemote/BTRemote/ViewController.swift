@@ -8,6 +8,12 @@
 
 import Cocoa
 import CoreBluetooth
+import CoreGraphics
+
+enum VirtualKeys: UInt16 {
+    case left = 0x7b
+    case right = 0x7c
+}
 
 class ViewController: NSViewController,CBCentralManagerDelegate,CBPeripheralDelegate  {
     var myCentralManager : CBCentralManager!
@@ -15,9 +21,9 @@ class ViewController: NSViewController,CBCentralManagerDelegate,CBPeripheralDele
     
     let myServiceUUID = CBUUID(string: "5CB39A21-3310-4A2E-B46E-8F6F3ABDA6CD")
     let cursorPosiotnUUID = CBUUID(string: "72ACF398-5A19-458C-83EB-01194E1AA533")
-    let yOfPointUUID = CBUUID(string: "546B3FE8-255F-4F69-A154-D3057CCF0499")
+    let arrowKeyUUID = CBUUID(string: "546B3FE8-255F-4F69-A154-D3057CCF0499")
     var cursorPositionCharacteristic : CBMutableCharacteristic!
-    var yOfPointCharacteristic : CBMutableCharacteristic!
+    var arrowKeyCharacteristic : CBMutableCharacteristic!
     
     var cursorPoint : CGPoint = CGPointZero
     
@@ -63,29 +69,24 @@ class ViewController: NSViewController,CBCentralManagerDelegate,CBPeripheralDele
     func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
         for service in peripheral.services! {
             print(service)
-            peripheral.discoverCharacteristics([cursorPosiotnUUID,yOfPointUUID], forService: service)
+            peripheral.discoverCharacteristics([cursorPosiotnUUID,arrowKeyUUID], forService: service)
         }
     }
     
     func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
         print("discovered Characteristic")
         for characteristic in service.characteristics!{
-            switch characteristic.UUID {
-            case cursorPosiotnUUID: fallthrough
-            case yOfPointUUID:
-                peripheral.setNotifyValue(true, forCharacteristic: characteristic)
-            default:
-                break
-            }
-            // subscribe value
+            peripheral.setNotifyValue(true, forCharacteristic: characteristic)
         }
     }
     
     
     func peripheral(peripheral: CBPeripheral, didUpdateNotificationStateForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
         if error != nil {
-            print(" reading subscribed value has error")
+            print( characteristic.UUID)
+            print(" reading subscribed value has error \n erro is :")
             print( error)
+            print("error end")
         }
     }
     
@@ -101,12 +102,30 @@ class ViewController: NSViewController,CBCentralManagerDelegate,CBPeripheralDele
                 cursorPoint = CGPoint(x: x, y: y)
                 CGWarpMouseCursorPosition(cursorPoint)
                 print(cursorPoint)
-            case yOfPointUUID:
+            case arrowKeyUUID:
+                let text = String(data: data, encoding: NSUTF8StringEncoding)!
+                print(text)
+                switch text {
+                case "Previous":
+                    createKeyCode(.left)
+                case "Next":
+                    createKeyCode(.right)
+                default:
+                    break
+                }
                 break
             default:
                 break
             }
         }
+    }
+    
+    func createKeyCode( key: VirtualKeys){
+        let source = CGEventSourceCreate(.HIDSystemState)
+        let rightPressed = CGEventCreateKeyboardEvent(source, key.rawValue, true)
+        CGEventPost(.CGHIDEventTap, rightPressed)
+        let rightReleased = CGEventCreateKeyboardEvent(source, key.rawValue, false)
+        CGEventPost(.CGHIDEventTap, rightReleased)
     }
     override var representedObject: AnyObject? {
         didSet {
