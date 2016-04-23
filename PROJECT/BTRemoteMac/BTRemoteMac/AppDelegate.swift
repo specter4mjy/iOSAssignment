@@ -18,7 +18,6 @@ enum VirtualKeys: UInt16 {
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPeripheralDelegate {
 
-    @IBOutlet weak var window: NSWindow!
     var myCentralManager : CBCentralManager!
     var myPeripheral : CBPeripheral!
     
@@ -31,13 +30,15 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
     var cursorPoint : CGPoint = CGPointZero
     
 
-    let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(NSSquareStatusItemLength)
+    @IBOutlet weak var statusMenu: NSMenu!
+    let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(NSVariableStatusItemLength)
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
         if let button = statusItem.button{
             button.image = NSImage(named: "icon")
         }
+        statusItem.menu = statusMenu
         
         setupCentral()
     }
@@ -45,7 +46,7 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
         myCentralManager = CBCentralManager(delegate: self, queue: nil)
     }
     
-    // MARK: iPad - Central Manager
+    // MARK:  Central Manager
     
     func centralManagerDidUpdateState(central: CBCentralManager) {
         if central.state == .PoweredOn{
@@ -71,7 +72,7 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
         peripheral.discoverServices([myServiceUUID])
     }
     
-    // MARK: iPad - Peripheral Delegates
+    // MARK:  Peripheral Delegates
     
     func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
         for service in peripheral.services! {
@@ -139,6 +140,9 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
         // Insert code here to tear down your application
     }
 
+    @IBAction func quitClicked(sender: NSMenuItem) {
+        NSApplication.sharedApplication().terminate(self)
+    }
 
 }
 
