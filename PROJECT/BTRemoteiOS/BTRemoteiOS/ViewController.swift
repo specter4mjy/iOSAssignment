@@ -65,15 +65,22 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     }
     
     @IBAction func panGestureHangler(sender: UIPanGestureRecognizer) {
-        let point = sender.locationInView(view)
-        print(point)
-        var xOfPoint = Double(point.x)
-        var yOfPoint = Double(point.y)
-        let cursorData = NSMutableData()
-        cursorData.appendBytes(&xOfPoint, length: sizeof(Double))
-        cursorData.appendBytes(&yOfPoint, length: sizeof(Double))
-        myPeripheralManager.updateValue(cursorData, forCharacteristic: cursorPositionCharacteristic, onSubscribedCentrals: nil)
-//        myPeripheralManager.updateValue(yData, forCharacteristic: yOfPointCharacteristic, onSubscribedCentrals: nil)
+        //        var point = sender.locationInView(view)
+        switch sender.state {
+        case .Changed:
+            let point = sender.translationInView(view)
+            print(point)
+            sender.setTranslation(CGPointZero, inView: view)
+            var xOfPoint = Double(point.x)
+            var yOfPoint = Double(point.y)
+            let cursorData = NSMutableData()
+            cursorData.appendBytes(&xOfPoint, length: sizeof(Double))
+            cursorData.appendBytes(&yOfPoint, length: sizeof(Double))
+            myPeripheralManager.updateValue(cursorData, forCharacteristic: cursorPositionCharacteristic, onSubscribedCentrals: nil)
+        default:
+            break
+        }
+        //        myPeripheralManager.updateValue(yData, forCharacteristic: yOfPointCharacteristic, onSubscribedCentrals: nil)
     }
 
     @IBAction func arrowKeys(sender: UIButton) {

@@ -27,7 +27,6 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
     var cursorPositionCharacteristic : CBMutableCharacteristic!
     var arrowKeyCharacteristic : CBMutableCharacteristic!
     
-    var cursorPoint : CGPoint = CGPointZero
     
 
     @IBOutlet weak var statusMenu: NSMenu!
@@ -107,9 +106,14 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
                 var y : Double = 0
                 let range = NSRange(location: sizeof(Double), length: sizeof(Double))
                 data.getBytes(&y, range: range)
-                cursorPoint = CGPoint(x: x, y: y)
+//                CGWarpMouseCursorPosition(cursorPoint)
+                var cursorPoint = NSEvent.mouseLocation()
+                let screenHeight = NSScreen.mainScreen()?.frame.height
+                cursorPoint.y = screenHeight! - cursorPoint.y
+                cursorPoint.x += CGFloat(x)
+                cursorPoint.y += CGFloat(y)
                 CGWarpMouseCursorPosition(cursorPoint)
-                print(cursorPoint)
+                print("x: \(x) y: \(y)")
             case arrowKeyUUID:
                 let text = String(data: data, encoding: NSUTF8StringEncoding)!
                 print(text)
@@ -135,6 +139,7 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
         let rightReleased = CGEventCreateKeyboardEvent(source, key.rawValue, false)
         CGEventPost(.CGHIDEventTap, rightReleased)
     }
+    
     
     func applicationWillTerminate(aNotification: NSNotification) {
         // Insert code here to tear down your application
