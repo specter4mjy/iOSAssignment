@@ -16,11 +16,14 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     var myPeripheralManager : CBPeripheralManager!
     var cursorPositionCharacteristic : CBMutableCharacteristic!
     var arrowKeyCharacteristic : CBMutableCharacteristic!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-            setupPeripheral()
+        setupPeripheral()
+        UIScreen.mainScreen().brightness = 0
+        
     }
 
 

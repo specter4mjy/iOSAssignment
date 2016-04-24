@@ -27,6 +27,7 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
     var cursorPositionCharacteristic : CBMutableCharacteristic!
     var arrowKeyCharacteristic : CBMutableCharacteristic!
     
+    let screenHeight = NSScreen.screens()!.first!.frame.height
     
 
     @IBOutlet weak var statusMenu: NSMenu!
@@ -108,8 +109,7 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
                 data.getBytes(&y, range: range)
 //                CGWarpMouseCursorPosition(cursorPoint)
                 var cursorPoint = NSEvent.mouseLocation()
-                let screenHeight = NSScreen.mainScreen()?.frame.height
-                cursorPoint.y = screenHeight! - cursorPoint.y
+                cursorPoint.y = screenHeight - cursorPoint.y
                 cursorPoint.x += CGFloat(x)
                 cursorPoint.y += CGFloat(y)
                 CGWarpMouseCursorPosition(cursorPoint)
