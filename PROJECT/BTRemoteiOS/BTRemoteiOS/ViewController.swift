@@ -8,8 +8,14 @@
 
 import UIKit
 import CoreBluetooth
+import MediaPlayer
+
+enum VolumeKeys {
+    case up, down
+}
 
 class ViewController: UIViewController,CBPeripheralManagerDelegate {
+    // Bluetooth properties
     let myServiceUUID = CBUUID(string: "5CB39A21-3310-4A2E-B46E-8F6F3ABDA6CD")
     let cursorPositionUUID = CBUUID(string: "72ACF398-5A19-458C-83EB-01194E1AA533")
     let arrowKeyUUID = CBUUID(string: "546B3FE8-255F-4F69-A154-D3057CCF0499")
@@ -17,17 +23,95 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     var cursorPositionCharacteristic : CBMutableCharacteristic!
     var arrowKeyCharacteristic : CBMutableCharacteristic!
     
+    
+    // volume button properties
+    var originalOutputVolume : Float = 0.5
+    
+    var volumeView :MPVolumeView!
+    
+    var restoreVolume = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         setupPeripheral()
-        UIScreen.mainScreen().brightness = 0
-        
+//        UIScreen.mainScreen().brightness = 0
+        hidSystemVolumeHUD()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        addVolumeChangeObserver()
+        hidSystemVolumeHUD()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+//        do{
+//            try audioSession.setActive(false)
+//            audioSession.removeObserver(self, forKeyPath: "outputVolume")
+//        } catch {
+//            print("audioSession clean error")
+//        }
+        volumeView.removeFromSuperview()
+    }
+    
+    
+    // MART: volume vutton
+    func addVolumeChangeObserver(){
+        let audioSession = AVAudioSession.sharedInstance()
+        originalOutputVolume = audioSession.outputVolume
+        do{
+            try audioSession.setActive(true)
+            try audioSession.setCategory(AVAudioSessionCategoryAmbient)
+        audioSession.addObserver(self, forKeyPath: "outputVolume", options: .New, context: nil)
+        } catch {
+            print("audioSession setup error")
+        }
+    }
+    
+    func setSystemOutputValue(value: Float){
+        if let slide = volumeView.subviews[1] as? UISlider{
+            slide.setValue(value, animated: false)
+        }
+    }
+    
+    func hidSystemVolumeHUD(){
+        volumeView = MPVolumeView(frame: CGRect(x: 0, y: -100, width: 0, height: 0))
+        view.addSubview(volumeView)
+    }
+    
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        if keyPath == "outputVolume"{
+            
+            if ( restoreVolume == true){
+                // volume changed caused by setSystemOutputValue method rather by user, so ignore it
+                restoreVolume = false
+                return
+            }
+            if let currentVolume = change?["new"] as? Float{
+                var key: VolumeKeys
+                
+                if currentVolume == originalOutputVolume{
+                    key = currentVolume == 1 ? .up : .down
+                } else {
+                    key = currentVolume > originalOutputVolume ? .up : .down
+                    restoreVolume = true
+                    setSystemOutputValue(originalOutputVolume)
+                }
+                
+                volumeButtonPressed(key)
+            }
+        }
+    }
+    
+    func volumeButtonPressed(key : VolumeKeys){
+        let keyString = key == .up ? "Previous" : "Next"
+        print( keyString)
+        let data = keyString.dataUsingEncoding(NSUTF8StringEncoding)
+        myPeripheralManager.updateValue(data!, forCharacteristic: arrowKeyCharacteristic, onSubscribedCentrals: nil)
     }
 
 
-    // MARK: iPhone - Peripheral Manager
+    // MARK: Bluetooth - Peripheral Manager
     private func setupPeripheral(){
         myPeripheralManager = CBPeripheralManager(delegate: self, queue: nil)
     }
