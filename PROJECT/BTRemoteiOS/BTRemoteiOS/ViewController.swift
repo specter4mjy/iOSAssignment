@@ -25,7 +25,10 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     
     
     // volume button properties
-    var originalOutputVolume : Float = 0.5
+    var systemOutputVolume  : Float {
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        return appDelegate.systemOutputVolume
+    }
     
     var volumeView :MPVolumeView!
     
@@ -36,37 +39,11 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         setupPeripheral()
 //        UIScreen.mainScreen().brightness = 0
-        hidSystemVolumeHUD()
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        addVolumeChangeObserver()
-        hidSystemVolumeHUD()
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-//        do{
-//            try audioSession.setActive(false)
-//            audioSession.removeObserver(self, forKeyPath: "outputVolume")
-//        } catch {
-//            print("audioSession clean error")
-//        }
-        volumeView.removeFromSuperview()
+        hideSystemVolumeHUD()
     }
     
     
     // MART: volume vutton
-    func addVolumeChangeObserver(){
-        let audioSession = AVAudioSession.sharedInstance()
-        originalOutputVolume = audioSession.outputVolume
-        do{
-            try audioSession.setActive(true)
-            try audioSession.setCategory(AVAudioSessionCategoryAmbient)
-        audioSession.addObserver(self, forKeyPath: "outputVolume", options: .New, context: nil)
-        } catch {
-            print("audioSession setup error")
-        }
-    }
     
     func setSystemOutputValue(value: Float){
         if let slide = volumeView.subviews[1] as? UISlider{
@@ -74,12 +51,13 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         }
     }
     
-    func hidSystemVolumeHUD(){
+    func hideSystemVolumeHUD(){
         volumeView = MPVolumeView(frame: CGRect(x: 0, y: -100, width: 0, height: 0))
         view.addSubview(volumeView)
     }
     
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        print(restoreVolume)
         if keyPath == "outputVolume"{
             
             if ( restoreVolume == true){
@@ -90,12 +68,13 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
             if let currentVolume = change?["new"] as? Float{
                 var key: VolumeKeys
                 
-                if currentVolume == originalOutputVolume{
+                print("current: \(currentVolume) system: \(systemOutputVolume)")
+                if currentVolume == systemOutputVolume{
                     key = currentVolume == 1 ? .up : .down
                 } else {
-                    key = currentVolume > originalOutputVolume ? .up : .down
+                    key = currentVolume > systemOutputVolume ? .up : .down
                     restoreVolume = true
-                    setSystemOutputValue(originalOutputVolume)
+                    setSystemOutputValue(systemOutputVolume)
                 }
                 
                 volumeButtonPressed(key)

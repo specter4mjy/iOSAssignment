@@ -7,13 +7,18 @@
 //
 
 import UIKit
+import MediaPlayer
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
+    let audioSession = AVAudioSession.sharedInstance()
+    
+    var systemOutputVolume: Float = 0.5
+    
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         return true
@@ -22,6 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+        removeVolumeChangeObserver()
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
@@ -35,10 +41,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        addVolumeChangeObserver()
     }
 
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    func addVolumeChangeObserver(){
+        systemOutputVolume = audioSession.outputVolume
+        do{
+            try audioSession.setActive(true)
+            try audioSession.setCategory(AVAudioSessionCategoryAmbient)
+            audioSession.addObserver((window?.rootViewController)!,
+                                     forKeyPath: "outputVolume", options: .New, context: nil)
+        } catch {
+            print("error occurs at obeserver adding")
+        }
+    }
+    
+    func removeVolumeChangeObserver(){
+        do{
+            try audioSession.setActive(false)
+            audioSession.removeObserver((window?.rootViewController)!, forKeyPath: "outputVolume")
+        } catch {
+            print("error occurs at obeserver removing")
+        }
     }
 
 
