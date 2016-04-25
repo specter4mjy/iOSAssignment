@@ -15,6 +15,8 @@ enum VolumeKeys {
 }
 
 class ViewController: UIViewController,CBPeripheralManagerDelegate {
+    
+    @IBOutlet weak var trackPadView: UIImageView!
     // Bluetooth properties
     let myServiceUUID = CBUUID(string: "5CB39A21-3310-4A2E-B46E-8F6F3ABDA6CD")
     let cursorPositionUUID = CBUUID(string: "72ACF398-5A19-458C-83EB-01194E1AA533")
@@ -36,6 +38,7 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        trackPadView.image = UIImage(named: "test")
         // Do any additional setup after loading the view, typically from a nib.
         setupPeripheral()
 //        UIScreen.mainScreen().brightness = 0
@@ -134,9 +137,9 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         //        var point = sender.locationInView(view)
         switch sender.state {
         case .Changed:
-            let point = sender.translationInView(view)
+            let point = sender.translationInView(trackPadView)
             print(point)
-            sender.setTranslation(CGPointZero, inView: view)
+            sender.setTranslation(CGPointZero, inView: trackPadView)
             var xOfPoint = Double(point.x)
             var yOfPoint = Double(point.y)
             let cursorData = NSMutableData()
@@ -149,11 +152,5 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         //        myPeripheralManager.updateValue(yData, forCharacteristic: yOfPointCharacteristic, onSubscribedCentrals: nil)
     }
 
-    @IBAction func arrowKeys(sender: UIButton) {
-        if let title = sender.titleLabel?.text{
-            let data = title.dataUsingEncoding(NSUTF8StringEncoding)
-            myPeripheralManager.updateValue(data!, forCharacteristic: arrowKeyCharacteristic, onSubscribedCentrals: nil)
-        }
-    }
 }
 
