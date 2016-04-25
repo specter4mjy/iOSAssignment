@@ -38,7 +38,8 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        trackPadView.image = UIImage(named: "test")
+        trackPadView.backgroundColor = UIColor.clearColor()
+        trackPadView.image = UIImage(named: "trackpad")
         // Do any additional setup after loading the view, typically from a nib.
         setupPeripheral()
 //        UIScreen.mainScreen().brightness = 0

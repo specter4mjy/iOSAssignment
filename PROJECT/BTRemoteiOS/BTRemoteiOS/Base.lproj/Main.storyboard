@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -19,20 +18,22 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hAx-fx-tMD" customClass="UIImageView">
-                                <rect key="frame" x="0.0" y="0.0" width="568" height="320"/>
+                                <rect key="frame" x="43" y="0.0" width="482" height="320"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="482" id="VKU-8t-9ee"/>
+                                    <constraint firstAttribute="height" constant="320" id="ahG-8R-RFs"/>
+                                </constraints>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="8rb-xV-w7R" appends="YES" id="s8c-gD-TVe"/>
                                 </connections>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.30148369073867798" green="0.31823968887329102" blue="0.37041836977005005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="hAx-fx-tMD" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="7dj-mz-diT"/>
-                            <constraint firstAttribute="trailing" secondItem="hAx-fx-tMD" secondAttribute="trailing" id="9gc-t2-6Sj"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="hAx-fx-tMD" secondAttribute="bottom" id="gYi-0E-wve"/>
-                            <constraint firstItem="hAx-fx-tMD" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="hox-zX-TV3"/>
+                            <constraint firstItem="hAx-fx-tMD" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="VNW-Qe-QeH"/>
+                            <constraint firstItem="hAx-fx-tMD" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="YMu-jH-Clb"/>
                         </constraints>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
