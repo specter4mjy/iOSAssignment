@@ -38,17 +38,12 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupImageViews()
         // Do any additional setup after loading the view, typically from a nib.
         setupPeripheral()
 //        UIScreen.mainScreen().brightness = 0
         hideSystemVolumeHUD()
     }
     
-    func setupImageViews(){
-        trackpadView.backgroundColor = UIColor.clearColor()
-        trackpadView.image = UIImage(named: "trackpad")
-    }
     
     // MART: volume vutton
     

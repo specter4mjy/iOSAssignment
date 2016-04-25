@@ -24,9 +24,24 @@
                                     <constraint firstAttribute="height" constant="44" id="kLT-BH-t9h"/>
                                     <constraint firstAttribute="width" constant="44" id="o1a-dR-OWv"/>
                                 </constraints>
+                                <size key="titleShadowOffset" width="2.2250738585072014e-308" height="2.2250738585072014e-308"/>
                                 <state key="normal" image="brightness"/>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hCM-ao-MHE">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sliderBG" translatesAutoresizingMaskIntoConstraints="NO" id="Zpz-Tq-PEp">
+                                <rect key="frame" x="489" y="73" width="31" height="236"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="236" id="4Mf-rM-xze"/>
+                                    <constraint firstAttribute="width" constant="31" id="WDK-wc-7sH"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="Thumb" translatesAutoresizingMaskIntoConstraints="NO" id="TZr-MR-oeh">
+                                <rect key="frame" x="493" y="100" width="24" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="24" id="9w5-BC-tx1"/>
+                                    <constraint firstAttribute="height" constant="24" id="moZ-iv-D3Y"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trackpad" translatesAutoresizingMaskIntoConstraints="NO" id="hCM-ao-MHE">
                                 <rect key="frame" x="0.0" y="0.0" width="482" height="320"/>
                                 <gestureRecognizers/>
                                 <constraints>
@@ -41,7 +56,10 @@
                         <color key="backgroundColor" red="0.30148369073867798" green="0.31823968887329102" blue="0.37041836977005005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="ERn-Np-4GA" firstAttribute="leading" secondItem="hCM-ao-MHE" secondAttribute="trailing" id="3rY-ez-1cY"/>
+                            <constraint firstItem="Zpz-Tq-PEp" firstAttribute="centerX" secondItem="ERn-Np-4GA" secondAttribute="centerX" id="Ovd-ch-dbB"/>
+                            <constraint firstItem="TZr-MR-oeh" firstAttribute="centerX" secondItem="Zpz-Tq-PEp" secondAttribute="centerX" id="VR9-Ds-QVk"/>
                             <constraint firstItem="hCM-ao-MHE" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="aKk-V8-Y1w"/>
+                            <constraint firstItem="Zpz-Tq-PEp" firstAttribute="top" secondItem="ERn-Np-4GA" secondAttribute="bottom" constant="13" id="fXf-XW-v2Q"/>
                             <constraint firstItem="hCM-ao-MHE" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ofT-SX-wjN"/>
                             <constraint firstItem="ERn-Np-4GA" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="16" id="unK-QB-P07"/>
                         </constraints>
@@ -63,6 +81,9 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Thumb" width="48" height="48"/>
         <image name="brightness" width="44" height="44"/>
+        <image name="sliderBG" width="31" height="236"/>
+        <image name="trackpad" width="478" height="320"/>
     </resources>
 </document>
