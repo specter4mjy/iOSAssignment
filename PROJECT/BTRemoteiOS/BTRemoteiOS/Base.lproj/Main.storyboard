@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -17,39 +18,51 @@
                         <rect key="frame" x="0.0" y="0.0" width="568" height="320"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hAx-fx-tMD" customClass="UIImageView">
-                                <rect key="frame" x="43" y="0.0" width="482" height="320"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ERn-Np-4GA">
+                                <rect key="frame" x="482" y="16" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="kLT-BH-t9h"/>
+                                    <constraint firstAttribute="width" constant="44" id="o1a-dR-OWv"/>
+                                </constraints>
+                                <state key="normal" image="brightness"/>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hCM-ao-MHE">
+                                <rect key="frame" x="0.0" y="0.0" width="482" height="320"/>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="482" id="VKU-8t-9ee"/>
-                                    <constraint firstAttribute="height" constant="320" id="ahG-8R-RFs"/>
+                                    <constraint firstAttribute="height" constant="320" id="Dki-M8-g8h"/>
+                                    <constraint firstAttribute="width" constant="482" id="NnZ-g3-Qd1"/>
                                 </constraints>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="8rb-xV-w7R" appends="YES" id="s8c-gD-TVe"/>
+                                    <outletCollection property="gestureRecognizers" destination="94C-Dj-5gj" appends="YES" id="jdN-k0-jHR"/>
                                 </connections>
-                            </view>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.30148369073867798" green="0.31823968887329102" blue="0.37041836977005005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="hAx-fx-tMD" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="VNW-Qe-QeH"/>
-                            <constraint firstItem="hAx-fx-tMD" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="YMu-jH-Clb"/>
+                            <constraint firstItem="ERn-Np-4GA" firstAttribute="leading" secondItem="hCM-ao-MHE" secondAttribute="trailing" id="3rY-ez-1cY"/>
+                            <constraint firstItem="hCM-ao-MHE" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="aKk-V8-Y1w"/>
+                            <constraint firstItem="hCM-ao-MHE" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ofT-SX-wjN"/>
+                            <constraint firstItem="ERn-Np-4GA" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="16" id="unK-QB-P07"/>
                         </constraints>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
-                        <outlet property="trackPadView" destination="hAx-fx-tMD" id="44G-oy-zaf"/>
+                        <outlet property="trackpadView" destination="hCM-ao-MHE" id="VF2-rd-2b3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="8rb-xV-w7R">
+                <panGestureRecognizer minimumNumberOfTouches="1" id="94C-Dj-5gj">
                     <connections>
-                        <action selector="panGestureHangler:" destination="BYZ-38-t0r" id="BQc-F8-Wca"/>
+                        <action selector="panGestureHangler:" destination="BYZ-38-t0r" id="W5n-Ya-dve"/>
                     </connections>
                 </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="695" y="528"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="brightness" width="44" height="44"/>
+    </resources>
 </document>
