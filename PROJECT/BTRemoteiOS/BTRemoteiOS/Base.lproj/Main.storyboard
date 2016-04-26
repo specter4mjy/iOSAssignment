@@ -26,21 +26,28 @@
                                 </constraints>
                                 <size key="titleShadowOffset" width="2.2250738585072014e-308" height="2.2250738585072014e-308"/>
                                 <state key="normal" image="brightness"/>
+                                <connections>
+                                    <action selector="brightnessPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="lyZ-US-JEH"/>
+                                </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sliderBG" translatesAutoresizingMaskIntoConstraints="NO" id="Zpz-Tq-PEp">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sliderBG" translatesAutoresizingMaskIntoConstraints="NO" id="G4Y-AN-Mn3">
                                 <rect key="frame" x="489" y="73" width="31" height="236"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="236" id="4Mf-rM-xze"/>
-                                    <constraint firstAttribute="width" constant="31" id="WDK-wc-7sH"/>
+                                    <constraint firstAttribute="width" constant="31" id="7Wd-Lh-HmK"/>
+                                    <constraint firstAttribute="height" constant="236" id="ZRq-Qn-xNd"/>
                                 </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="Thumb" translatesAutoresizingMaskIntoConstraints="NO" id="TZr-MR-oeh">
-                                <rect key="frame" x="493" y="100" width="24" height="24"/>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="LjD-24-z46">
+                                <rect key="frame" x="399" y="176" width="214" height="31"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="24" id="9w5-BC-tx1"/>
-                                    <constraint firstAttribute="height" constant="24" id="moZ-iv-D3Y"/>
+                                    <constraint firstAttribute="width" constant="210" id="8wC-4B-pSa"/>
                                 </constraints>
-                            </imageView>
+                                <color key="minimumTrackTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="maximumTrackTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <action selector="speedChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="MNB-4f-Qce"/>
+                                </connections>
+                            </slider>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trackpad" translatesAutoresizingMaskIntoConstraints="NO" id="hCM-ao-MHE">
                                 <rect key="frame" x="0.0" y="0.0" width="482" height="320"/>
                                 <gestureRecognizers/>
@@ -56,10 +63,11 @@
                         <color key="backgroundColor" red="0.30148369073867798" green="0.31823968887329102" blue="0.37041836977005005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="ERn-Np-4GA" firstAttribute="leading" secondItem="hCM-ao-MHE" secondAttribute="trailing" id="3rY-ez-1cY"/>
-                            <constraint firstItem="Zpz-Tq-PEp" firstAttribute="centerX" secondItem="ERn-Np-4GA" secondAttribute="centerX" id="Ovd-ch-dbB"/>
-                            <constraint firstItem="TZr-MR-oeh" firstAttribute="centerX" secondItem="Zpz-Tq-PEp" secondAttribute="centerX" id="VR9-Ds-QVk"/>
+                            <constraint firstItem="G4Y-AN-Mn3" firstAttribute="top" secondItem="ERn-Np-4GA" secondAttribute="bottom" constant="13" id="Okn-kD-UGp"/>
+                            <constraint firstItem="G4Y-AN-Mn3" firstAttribute="centerX" secondItem="ERn-Np-4GA" secondAttribute="centerX" id="Zbc-x4-DVD"/>
                             <constraint firstItem="hCM-ao-MHE" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="aKk-V8-Y1w"/>
-                            <constraint firstItem="Zpz-Tq-PEp" firstAttribute="top" secondItem="ERn-Np-4GA" secondAttribute="bottom" constant="13" id="fXf-XW-v2Q"/>
+                            <constraint firstItem="LjD-24-z46" firstAttribute="centerY" secondItem="G4Y-AN-Mn3" secondAttribute="centerY" id="foW-gs-imX"/>
+                            <constraint firstItem="LjD-24-z46" firstAttribute="centerX" secondItem="G4Y-AN-Mn3" secondAttribute="centerX" constant="1" id="ka7-Zu-LTg"/>
                             <constraint firstItem="hCM-ao-MHE" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ofT-SX-wjN"/>
                             <constraint firstItem="ERn-Np-4GA" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="16" id="unK-QB-P07"/>
                         </constraints>
@@ -67,6 +75,7 @@
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
+                        <outlet property="speedSlider" destination="LjD-24-z46" id="CYP-Nt-24f"/>
                         <outlet property="trackpadView" destination="hCM-ao-MHE" id="VF2-rd-2b3"/>
                     </connections>
                 </viewController>
@@ -77,11 +86,10 @@
                     </connections>
                 </panGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="695" y="528"/>
+            <point key="canvasLocation" x="829" y="533"/>
         </scene>
     </scenes>
     <resources>
-        <image name="Thumb" width="48" height="48"/>
         <image name="brightness" width="44" height="44"/>
         <image name="sliderBG" width="31" height="236"/>
         <image name="trackpad" width="478" height="320"/>

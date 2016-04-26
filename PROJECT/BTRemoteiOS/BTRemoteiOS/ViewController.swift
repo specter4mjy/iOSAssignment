@@ -17,6 +17,7 @@ enum VolumeKeys {
 class ViewController: UIViewController,CBPeripheralManagerDelegate {
     
     @IBOutlet weak var trackpadView: UIImageView!
+    @IBOutlet weak var speedSlider: UISlider!
     // Bluetooth properties
     let myServiceUUID = CBUUID(string: "5CB39A21-3310-4A2E-B46E-8F6F3ABDA6CD")
     let cursorPositionUUID = CBUUID(string: "72ACF398-5A19-458C-83EB-01194E1AA533")
@@ -38,10 +39,18 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupSpeedSlider()
         // Do any additional setup after loading the view, typically from a nib.
         setupPeripheral()
 //        UIScreen.mainScreen().brightness = 0
         hideSystemVolumeHUD()
+        
+    }
+    
+    func setupSpeedSlider(){
+        let rotateTransform = CGAffineTransformMakeRotation(CGFloat(-M_PI_2))
+        speedSlider.transform = rotateTransform
+        speedSlider.setThumbImage(UIImage(named: "thumb"), forState: .Normal)
     }
     
     
@@ -151,5 +160,11 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         //        myPeripheralManager.updateValue(yData, forCharacteristic: yOfPointCharacteristic, onSubscribedCentrals: nil)
     }
 
+    @IBAction func brightnessPressed() {
+        print("button")
+    }
+    @IBAction func speedChanged(sender: UISlider) {
+            print(sender.value)
+    }
 }
 
