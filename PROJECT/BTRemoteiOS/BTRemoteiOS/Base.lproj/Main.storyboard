@@ -3,7 +3,9 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -18,31 +20,61 @@
                         <rect key="frame" x="0.0" y="0.0" width="568" height="320"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ERn-Np-4GA">
-                                <rect key="frame" x="482" y="16" width="44" height="44"/>
-                                <gestureRecognizers/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="rnz-cl-521">
+                                <rect key="frame" x="484" y="0.0" width="44" height="320"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="O10-gc-EuU">
+                                        <rect key="frame" x="22" y="0.0" width="0.0" height="13"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ERn-Np-4GA">
+                                        <rect key="frame" x="0.0" y="13" width="44" height="44"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="ERn-Np-4GA" secondAttribute="height" multiplier="1:1" id="ZiM-dn-3rC"/>
+                                        </constraints>
+                                        <size key="titleShadowOffset" width="2.2250738585072014e-308" height="2.2250738585072014e-308"/>
+                                        <state key="normal" image="brightness"/>
+                                        <connections>
+                                            <action selector="brightnessPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="lyZ-US-JEH"/>
+                                        </connections>
+                                    </button>
+                                    <view contentMode="scaleToFill" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="06a-8m-LW5">
+                                        <rect key="frame" x="22" y="57" width="0.0" height="13"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sliderBG" translatesAutoresizingMaskIntoConstraints="NO" id="G4Y-AN-Mn3">
+                                        <rect key="frame" x="7" y="70" width="31" height="237"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="31" id="7Wd-Lh-HmK"/>
+                                            <constraint firstAttribute="height" constant="236" id="ZRq-Qn-xNd"/>
+                                            <constraint firstAttribute="width" secondItem="G4Y-AN-Mn3" secondAttribute="height" multiplier="31:237" id="kqb-gQ-lXJ"/>
+                                        </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="7Wd-Lh-HmK"/>
+                                                <exclude reference="ZRq-Qn-xNd"/>
+                                            </mask>
+                                        </variation>
+                                    </imageView>
+                                    <view contentMode="scaleToFill" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="1ZS-wH-yKa">
+                                        <rect key="frame" x="22" y="307" width="0.0" height="13"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </view>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="kLT-BH-t9h"/>
-                                    <constraint firstAttribute="width" constant="44" id="o1a-dR-OWv"/>
+                                    <constraint firstItem="06a-8m-LW5" firstAttribute="height" secondItem="O10-gc-EuU" secondAttribute="height" id="IFl-Ps-qZD"/>
+                                    <constraint firstItem="G4Y-AN-Mn3" firstAttribute="width" secondItem="ERn-Np-4GA" secondAttribute="width" multiplier="4:3" id="maF-bE-hu8"/>
+                                    <constraint firstItem="1ZS-wH-yKa" firstAttribute="height" secondItem="O10-gc-EuU" secondAttribute="height" id="s1C-WA-Gdf"/>
                                 </constraints>
-                                <size key="titleShadowOffset" width="2.2250738585072014e-308" height="2.2250738585072014e-308"/>
-                                <state key="normal" image="brightness"/>
-                                <connections>
-                                    <action selector="brightnessPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="lyZ-US-JEH"/>
-                                </connections>
-                            </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sliderBG" translatesAutoresizingMaskIntoConstraints="NO" id="G4Y-AN-Mn3">
-                                <rect key="frame" x="489" y="73" width="31" height="236"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="31" id="7Wd-Lh-HmK"/>
-                                    <constraint firstAttribute="height" constant="236" id="ZRq-Qn-xNd"/>
-                                </constraints>
-                            </imageView>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="maF-bE-hu8"/>
+                                    </mask>
+                                </variation>
+                            </stackView>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.5" maxValue="5" translatesAutoresizingMaskIntoConstraints="NO" id="LjD-24-z46">
-                                <rect key="frame" x="399" y="176" width="214" height="31"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="210" id="8wC-4B-pSa"/>
-                                </constraints>
+                                <rect key="frame" x="395" y="174" width="222" height="31"/>
                                 <color key="minimumTrackTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="maximumTrackTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -50,12 +82,19 @@
                                 </connections>
                             </slider>
                             <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trackpad" translatesAutoresizingMaskIntoConstraints="NO" id="hCM-ao-MHE">
-                                <rect key="frame" x="0.0" y="0.0" width="482" height="320"/>
+                                <rect key="frame" x="0.0" y="0.0" width="464" height="320"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="320" id="Dki-M8-g8h"/>
                                     <constraint firstAttribute="width" constant="482" id="NnZ-g3-Qd1"/>
+                                    <constraint firstAttribute="width" secondItem="hCM-ao-MHE" secondAttribute="height" multiplier="464:320" id="dNU-76-5aK"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Dki-M8-g8h"/>
+                                        <exclude reference="NnZ-g3-Qd1"/>
+                                    </mask>
+                                </variation>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="HQr-26-8rN" appends="YES" id="dh8-d5-h84"/>
                                 </connections>
@@ -64,22 +103,22 @@
                         <color key="backgroundColor" red="0.30148369073867798" green="0.31823968887329102" blue="0.37041836977005005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="ERn-Np-4GA" firstAttribute="leading" secondItem="hCM-ao-MHE" secondAttribute="trailing" id="3rY-ez-1cY"/>
-                            <constraint firstItem="G4Y-AN-Mn3" firstAttribute="top" secondItem="ERn-Np-4GA" secondAttribute="bottom" constant="13" id="Okn-kD-UGp"/>
-                            <constraint firstItem="G4Y-AN-Mn3" firstAttribute="centerX" secondItem="ERn-Np-4GA" secondAttribute="centerX" id="Zbc-x4-DVD"/>
-                            <constraint firstItem="hCM-ao-MHE" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="aKk-V8-Y1w"/>
-                            <constraint firstItem="LjD-24-z46" firstAttribute="centerY" secondItem="G4Y-AN-Mn3" secondAttribute="centerY" id="foW-gs-imX"/>
-                            <constraint firstItem="LjD-24-z46" firstAttribute="centerX" secondItem="G4Y-AN-Mn3" secondAttribute="centerX" constant="1" id="ka7-Zu-LTg"/>
+                            <constraint firstAttribute="topMargin" secondItem="hCM-ao-MHE" secondAttribute="top" id="9AO-WC-3W6"/>
+                            <constraint firstItem="LjD-24-z46" firstAttribute="width" secondItem="G4Y-AN-Mn3" secondAttribute="height" multiplier="92:100" id="MeF-s4-IUY"/>
+                            <constraint firstItem="rnz-cl-521" firstAttribute="leading" secondItem="hCM-ao-MHE" secondAttribute="trailing" constant="20" id="NxP-7r-93r"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="hCM-ao-MHE" secondAttribute="bottom" id="PUa-HX-qDt"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="rnz-cl-521" secondAttribute="bottom" id="eUq-vj-sy3"/>
+                            <constraint firstItem="LjD-24-z46" firstAttribute="centerY" secondItem="G4Y-AN-Mn3" secondAttribute="centerY" id="gBs-31-mJV"/>
                             <constraint firstItem="hCM-ao-MHE" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ofT-SX-wjN"/>
-                            <constraint firstItem="ERn-Np-4GA" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="16" id="unK-QB-P07"/>
+                            <constraint firstItem="LjD-24-z46" firstAttribute="centerX" secondItem="G4Y-AN-Mn3" secondAttribute="centerX" id="vri-8s-NBl"/>
+                            <constraint firstItem="rnz-cl-521" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="zBr-Yu-hSp"/>
                         </constraints>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
-                        <outlet property="brightnessButton" destination="ERn-Np-4GA" id="mCd-px-AUH"/>
-                        <outlet property="sliderBackgroundView" destination="G4Y-AN-Mn3" id="ZdT-EK-R7E"/>
                         <outlet property="speedSlider" destination="LjD-24-z46" id="CYP-Nt-24f"/>
+                        <outlet property="stackView" destination="rnz-cl-521" id="zWw-fj-5cJ"/>
                         <outlet property="trackpadView" destination="hCM-ao-MHE" id="VF2-rd-2b3"/>
                     </connections>
                 </viewController>
@@ -95,7 +134,7 @@
     </scenes>
     <resources>
         <image name="brightness" width="44" height="44"/>
-        <image name="sliderBG" width="31" height="236"/>
-        <image name="trackpad" width="478" height="320"/>
+        <image name="sliderBG" width="31" height="237"/>
+        <image name="trackpad" width="464" height="320"/>
     </resources>
 </document>

@@ -25,14 +25,12 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
             speedSlider.setThumbImage(UIImage(named: "thumb"), forState: .Normal)
         }
     }
-    @IBOutlet weak var brightnessButton: UIButton!
-    @IBOutlet weak var sliderBackgroundView: UIImageView!
+    @IBOutlet weak var stackView: UIStackView!
     
     lazy var settingViews : [UIView] = {
         var views = [UIView]()
         views.append(self.speedSlider)
-        views.append(self.brightnessButton)
-        views.append(self.sliderBackgroundView)
+        views.append(self.stackView)
         return views
     }()
     
@@ -48,6 +46,7 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     
     var gestureFingerNumber = 0
     
+    let trackpadCenterOffset:CGFloat = 4
     
     // volume button properties
     let audioSession = AVAudioSession.sharedInstance()
@@ -91,14 +90,19 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         setupElementsLocation()
     }
     
+    
     func setupElementsLocation(){
-        moveSettingViewsXBy(50)
+        speedSlider.center.x += 2
+        let currentTrackpadCenterX = trackpadView.center.x - trackpadCenterOffset
+        let screenCenterX = view.center.x
+        let distence = screenCenterX - currentTrackpadCenterX
+        moveSettingViewsXBy(distence)
     }
     func moveSettingViewsXBy(x: CGFloat){
         let targetTrackpadOriginX = trackpadView.frame.origin.x + x
-        let targetTrackpadCenterX = trackpadView.center.x + x
-        let screenCenterX = view.center.x + 10
-        if (targetTrackpadOriginX < 0) || (targetTrackpadCenterX > screenCenterX){
+        let targetTrackpadCenterX = trackpadView.center.x - trackpadCenterOffset + x
+        let screenCenterX = view.center.x 
+        if (targetTrackpadOriginX < 0) || (targetTrackpadCenterX > screenCenterX ){
             return
         }
         trackpadView.center.x += x
@@ -109,8 +113,8 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     
     func rearrangeSettingViewsAfterPanGesture(){
         let currentTrackpadOriginX = trackpadView.frame.origin.x
-        let currentTrackpadCenterX = trackpadView.center.x
-        let screenCenterX = view.center.x + 10
+        let currentTrackpadCenterX = trackpadView.center.x - trackpadCenterOffset
+        let screenCenterX = view.center.x
         let leftDistence = currentTrackpadOriginX
         let rightDistence = screenCenterX - currentTrackpadCenterX
         UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .CurveEaseInOut, animations: {
