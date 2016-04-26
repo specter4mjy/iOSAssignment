@@ -25,6 +25,16 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
             speedSlider.setThumbImage(UIImage(named: "thumb"), forState: .Normal)
         }
     }
+    @IBOutlet weak var brightnessButton: UIButton!
+    @IBOutlet weak var sliderBackgroundView: UIImageView!
+    
+    lazy var settingViews : [UIView] = {
+        var views = [UIView]()
+        views.append(self.speedSlider)
+        views.append(self.brightnessButton)
+        views.append(self.sliderBackgroundView)
+        return views
+    }()
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
@@ -35,6 +45,8 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     var myPeripheralManager : CBPeripheralManager!
     var cursorPositionCharacteristic : CBMutableCharacteristic!
     var arrowKeyCharacteristic : CBMutableCharacteristic!
+    
+    var gestureFingerNumber = 0
     
     
     // volume button properties
@@ -64,13 +76,50 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     var volumeView :MPVolumeView!
     
     var restoreVolume = false
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupPeripheral()
         hideSystemVolumeHUD()
         bindApplicationLifeCycleNotifications()
+    }
+    
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setupElementsLocation()
+    }
+    
+    func setupElementsLocation(){
+        moveSettingViewsXBy(50)
+    }
+    func moveSettingViewsXBy(x: CGFloat){
+        let targetTrackpadOriginX = trackpadView.frame.origin.x + x
+        let targetTrackpadCenterX = trackpadView.center.x + x
+        let screenCenterX = view.center.x + 10
+        if (targetTrackpadOriginX < 0) || (targetTrackpadCenterX > screenCenterX){
+            return
+        }
+        trackpadView.center.x += x
+        for view in settingViews{
+            view.center.x += x * 2
+        }
+    }
+    
+    func rearrangeSettingViewsAfterPanGesture(){
+        let currentTrackpadOriginX = trackpadView.frame.origin.x
+        let currentTrackpadCenterX = trackpadView.center.x
+        let screenCenterX = view.center.x + 10
+        let leftDistence = currentTrackpadOriginX
+        let rightDistence = screenCenterX - currentTrackpadCenterX
+        UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .CurveEaseInOut, animations: {
+            if leftDistence > rightDistence {
+                self.moveSettingViewsXBy(rightDistence)
+            }else{
+                self.moveSettingViewsXBy(-leftDistence)
+            }
+            }, completion: nil)
     }
     
     // MART: volume button
@@ -161,8 +210,8 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         let data = keyString.dataUsingEncoding(NSUTF8StringEncoding)
         myPeripheralManager.updateValue(data!, forCharacteristic: arrowKeyCharacteristic, onSubscribedCentrals: nil)
     }
-
-
+    
+    
     // MARK: Bluetooth - Peripheral Manager
     private func setupPeripheral(){
         myPeripheralManager = CBPeripheralManager(delegate: self, queue: nil)
@@ -203,22 +252,42 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         print(" did subscribe characteristic")
     }
     
-
+    
     @IBAction func panGestureHandler(sender: UIPanGestureRecognizer) {
         switch sender.state {
+        case .Began:
+            gestureFingerNumber = sender.numberOfTouches()
         case .Changed:
-            let point = sender.translationInView(trackpadView)
-            print(point)
-            sender.setTranslation(CGPointZero, inView: trackpadView)
-            var xOfPoint = Double(point.x) * Double(cursorSpeed)
-            var yOfPoint = Double(point.y) * Double(cursorSpeed)
-            let cursorData = NSMutableData()
-            cursorData.appendBytes(&xOfPoint, length: sizeof(Double))
-            cursorData.appendBytes(&yOfPoint, length: sizeof(Double))
-            myPeripheralManager.updateValue(cursorData, forCharacteristic: cursorPositionCharacteristic, onSubscribedCentrals: nil)
+            if gestureFingerNumber == 1{
+                gestureForCursorPosition(sender)
+            }else{
+                gestureForSettingViews(sender)
+            }
+        case .Ended:
+            if gestureFingerNumber != 1 {
+                rearrangeSettingViewsAfterPanGesture()
+            }
         default:
             break
         }
+    }
+    
+    func gestureForSettingViews(sender: UIPanGestureRecognizer){
+        let point = sender.translationInView(view)
+        sender.setTranslation(CGPointZero, inView: view)
+        moveSettingViewsXBy(point.x)
+    }
+    
+    func gestureForCursorPosition(sender: UIPanGestureRecognizer){
+        let point = sender.translationInView(trackpadView)
+        sender.setTranslation(CGPointZero, inView: trackpadView)
+        var xOfPoint = Double(point.x) * Double(cursorSpeed)
+        var yOfPoint = Double(point.y) * Double(cursorSpeed)
+        let cursorData = NSMutableData()
+        cursorData.appendBytes(&xOfPoint, length: sizeof(Double))
+        cursorData.appendBytes(&yOfPoint, length: sizeof(Double))
+        myPeripheralManager.updateValue(cursorData, forCharacteristic: cursorPositionCharacteristic, onSubscribedCentrals: nil)
+        
     }
     @IBAction func brightnessPressed() {
         switch brightnessState {

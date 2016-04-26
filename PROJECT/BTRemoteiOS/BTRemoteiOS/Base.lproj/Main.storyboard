@@ -20,6 +20,7 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ERn-Np-4GA">
                                 <rect key="frame" x="482" y="16" width="44" height="44"/>
+                                <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="kLT-BH-t9h"/>
                                     <constraint firstAttribute="width" constant="44" id="o1a-dR-OWv"/>
@@ -61,6 +62,7 @@
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.30148369073867798" green="0.31823968887329102" blue="0.37041836977005005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="ERn-Np-4GA" firstAttribute="leading" secondItem="hCM-ao-MHE" secondAttribute="trailing" id="3rY-ez-1cY"/>
                             <constraint firstItem="G4Y-AN-Mn3" firstAttribute="top" secondItem="ERn-Np-4GA" secondAttribute="bottom" constant="13" id="Okn-kD-UGp"/>
@@ -75,6 +77,8 @@
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
+                        <outlet property="brightnessButton" destination="ERn-Np-4GA" id="mCd-px-AUH"/>
+                        <outlet property="sliderBackgroundView" destination="G4Y-AN-Mn3" id="ZdT-EK-R7E"/>
                         <outlet property="speedSlider" destination="LjD-24-z46" id="CYP-Nt-24f"/>
                         <outlet property="trackpadView" destination="hCM-ao-MHE" id="VF2-rd-2b3"/>
                     </connections>
