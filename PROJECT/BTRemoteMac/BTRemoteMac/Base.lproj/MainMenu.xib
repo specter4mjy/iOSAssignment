@@ -14,14 +14,19 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="BTRemoteMac" customModuleProvider="target">
             <connections>
+                <outlet property="connectStateMenuItem" destination="rsD-cQ-Qmh" id="hSK-HQ-0VQ"/>
                 <outlet property="statusMenu" destination="6e3-lU-R4m" id="x3b-wA-00r"/>
             </connections>
         </customObject>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
         <menu id="6e3-lU-R4m">
             <items>
-                <menuItem title="Quit" id="bqd-Zz-286">
+                <menuItem title="Scanning..." enabled="NO" id="rsD-cQ-Qmh">
+                    <attributedString key="attributedTitle"/>
                     <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="VfB-zu-8Hn"/>
+                <menuItem title="Quit" keyEquivalent="q" id="bqd-Zz-286">
                     <connections>
                         <action selector="quitClicked:" target="Voe-Tx-rLC" id="zlb-vX-qKe"/>
                     </connections>

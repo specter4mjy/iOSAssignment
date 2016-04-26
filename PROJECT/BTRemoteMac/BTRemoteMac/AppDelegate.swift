@@ -31,6 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
     
 
     @IBOutlet weak var statusMenu: NSMenu!
+    @IBOutlet weak var connectStateMenuItem: NSMenuItem!
     let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(NSVariableStatusItemLength)
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
@@ -59,17 +60,26 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
     }
     
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
-        print(advertisementData)
         myPeripheral = peripheral
         central.connectPeripheral(peripheral, options: nil)
         central.stopScan()
-        print(peripheral)
     }
+    
     
     func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
         print("peripheral connected")
         peripheral.delegate = self
         peripheral.discoverServices([myServiceUUID])
+        if let title = peripheral.name {
+            connectStateMenuItem.title = "\(title) Connected"
+        }
+        
+    }
+    
+    func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+        print("disconnected")
+        connectStateMenuItem.title = "Scanning..."
+        myCentralManager.scanForPeripheralsWithServices([myServiceUUID], options: nil)
     }
     
     // MARK:  Peripheral Delegates
