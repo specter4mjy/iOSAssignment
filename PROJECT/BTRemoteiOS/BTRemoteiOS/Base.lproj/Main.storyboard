@@ -37,7 +37,7 @@
                                     <constraint firstAttribute="height" constant="236" id="ZRq-Qn-xNd"/>
                                 </constraints>
                             </imageView>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="LjD-24-z46">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.5" maxValue="5" translatesAutoresizingMaskIntoConstraints="NO" id="LjD-24-z46">
                                 <rect key="frame" x="399" y="176" width="214" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="210" id="8wC-4B-pSa"/>
@@ -48,7 +48,7 @@
                                     <action selector="speedChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="MNB-4f-Qce"/>
                                 </connections>
                             </slider>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trackpad" translatesAutoresizingMaskIntoConstraints="NO" id="hCM-ao-MHE">
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trackpad" translatesAutoresizingMaskIntoConstraints="NO" id="hCM-ao-MHE">
                                 <rect key="frame" x="0.0" y="0.0" width="482" height="320"/>
                                 <gestureRecognizers/>
                                 <constraints>
@@ -56,7 +56,7 @@
                                     <constraint firstAttribute="width" constant="482" id="NnZ-g3-Qd1"/>
                                 </constraints>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="94C-Dj-5gj" appends="YES" id="jdN-k0-jHR"/>
+                                    <outletCollection property="gestureRecognizers" destination="HQr-26-8rN" appends="YES" id="dh8-d5-h84"/>
                                 </connections>
                             </imageView>
                         </subviews>
@@ -80,9 +80,9 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="94C-Dj-5gj">
+                <panGestureRecognizer minimumNumberOfTouches="1" id="HQr-26-8rN">
                     <connections>
-                        <action selector="panGestureHangler:" destination="BYZ-38-t0r" id="W5n-Ya-dve"/>
+                        <action selector="panGestureHandler:" destination="BYZ-38-t0r" id="K7A-27-jKK"/>
                     </connections>
                 </panGestureRecognizer>
             </objects>

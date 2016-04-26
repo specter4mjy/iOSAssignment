@@ -107,7 +107,6 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
                 var y : Double = 0
                 let range = NSRange(location: sizeof(Double), length: sizeof(Double))
                 data.getBytes(&y, range: range)
-//                CGWarpMouseCursorPosition(cursorPoint)
                 var cursorPoint = NSEvent.mouseLocation()
                 cursorPoint.y = screenHeight - cursorPoint.y
                 cursorPoint.x += CGFloat(x)

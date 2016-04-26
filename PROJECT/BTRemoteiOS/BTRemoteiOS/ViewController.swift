@@ -17,7 +17,17 @@ enum VolumeKeys {
 class ViewController: UIViewController,CBPeripheralManagerDelegate {
     
     @IBOutlet weak var trackpadView: UIImageView!
-    @IBOutlet weak var speedSlider: UISlider!
+    @IBOutlet weak var speedSlider: UISlider! {
+        didSet{
+            speedSlider.value = cursorSpeed
+            let rotateTransform = CGAffineTransformMakeRotation(CGFloat(-M_PI_2))
+            speedSlider.transform = rotateTransform
+            speedSlider.setThumbImage(UIImage(named: "thumb"), forState: .Normal)
+        }
+    }
+    
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    
     // Bluetooth properties
     let myServiceUUID = CBUUID(string: "5CB39A21-3310-4A2E-B46E-8F6F3ABDA6CD")
     let cursorPositionUUID = CBUUID(string: "72ACF398-5A19-458C-83EB-01194E1AA533")
@@ -29,9 +39,37 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     
     // volume button properties
     var systemOutputVolume  : Float {
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         return appDelegate.systemOutputVolume
     }
+    var systemBrightness  : CGFloat {
+        return appDelegate.systemBrightness
+    }
+    
+    var brightnessState  : BrightnessState {
+        get{
+            return appDelegate.brightnessState
+        }
+        set{
+            appDelegate.brightnessState = newValue
+        }
+    }
+    
+    var cursorSpeed: Float  {
+        get{
+            let defaults = NSUserDefaults.standardUserDefaults()
+            var cursorSpeedValue = defaults.floatForKey("cursorSpeed")
+            if cursorSpeedValue == 0 {
+                cursorSpeedValue = 1
+            }
+            return cursorSpeedValue
+        }
+        set{
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.setFloat(newValue, forKey: "cursorSpeed")
+            speedSlider.value = newValue
+        }
+    }
+    
     
     var volumeView :MPVolumeView!
     
@@ -39,22 +77,15 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupSpeedSlider()
+        
         // Do any additional setup after loading the view, typically from a nib.
         setupPeripheral()
-//        UIScreen.mainScreen().brightness = 0
         hideSystemVolumeHUD()
-        
-    }
-    
-    func setupSpeedSlider(){
-        let rotateTransform = CGAffineTransformMakeRotation(CGFloat(-M_PI_2))
-        speedSlider.transform = rotateTransform
-        speedSlider.setThumbImage(UIImage(named: "thumb"), forState: .Normal)
     }
     
     
-    // MART: volume vutton
+    
+    // MART: volume button
     
     func setSystemOutputValue(value: Float){
         if let slide = volumeView.subviews[1] as? UISlider{
@@ -68,7 +99,6 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     }
     
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
-        print(restoreVolume)
         if keyPath == "outputVolume"{
             
             if ( restoreVolume == true){
@@ -141,15 +171,15 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         print(" did subscribe characteristic")
     }
     
-    @IBAction func panGestureHangler(sender: UIPanGestureRecognizer) {
-        //        var point = sender.locationInView(view)
+
+    @IBAction func panGestureHandler(sender: UIPanGestureRecognizer) {
         switch sender.state {
         case .Changed:
             let point = sender.translationInView(trackpadView)
             print(point)
             sender.setTranslation(CGPointZero, inView: trackpadView)
-            var xOfPoint = Double(point.x)
-            var yOfPoint = Double(point.y)
+            var xOfPoint = Double(point.x) * Double(cursorSpeed)
+            var yOfPoint = Double(point.y) * Double(cursorSpeed)
             let cursorData = NSMutableData()
             cursorData.appendBytes(&xOfPoint, length: sizeof(Double))
             cursorData.appendBytes(&yOfPoint, length: sizeof(Double))
@@ -157,14 +187,19 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         default:
             break
         }
-        //        myPeripheralManager.updateValue(yData, forCharacteristic: yOfPointCharacteristic, onSubscribedCentrals: nil)
     }
-
     @IBAction func brightnessPressed() {
-        print("button")
+        switch brightnessState {
+        case .off:
+            brightnessState = .on
+            UIScreen.mainScreen().brightness = systemBrightness
+        case .on:
+            brightnessState = .off
+            UIScreen.mainScreen().brightness = 0
+        }
     }
     @IBAction func speedChanged(sender: UISlider) {
-            print(sender.value)
+        cursorSpeed = sender.value
     }
 }
 

@@ -9,6 +9,10 @@
 import UIKit
 import MediaPlayer
 
+enum BrightnessState {
+    case on, off
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -17,6 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let audioSession = AVAudioSession.sharedInstance()
     
     var systemOutputVolume: Float = 0.5
+    var systemBrightness: CGFloat = 0.5
+    var brightnessState: BrightnessState = .on
     
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -28,6 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
         removeVolumeChangeObserver()
+        UIScreen.mainScreen().brightness = systemBrightness
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
@@ -42,6 +49,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         addVolumeChangeObserver()
+        systemBrightness = UIScreen.mainScreen().brightness
+        if brightnessState == .off {
+            UIScreen.mainScreen().brightness =  0
+        }
     }
 
     func applicationWillTerminate(application: UIApplication) {
@@ -68,7 +79,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("error occurs at obeserver removing")
         }
     }
-
 
 }
 
