@@ -38,21 +38,11 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     
     
     // volume button properties
-    var systemOutputVolume  : Float {
-        return appDelegate.systemOutputVolume
-    }
-    var systemBrightness  : CGFloat {
-        return appDelegate.systemBrightness
-    }
+    let audioSession = AVAudioSession.sharedInstance()
     
-    var brightnessState  : BrightnessState {
-        get{
-            return appDelegate.brightnessState
-        }
-        set{
-            appDelegate.brightnessState = newValue
-        }
-    }
+    var systemOutputVolume: Float = 0.5
+    var systemBrightness: CGFloat = 0.5
+    var brightnessState: BrightnessState = .on
     
     var cursorSpeed: Float  {
         get{
@@ -78,14 +68,56 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view, typically from a nib.
         setupPeripheral()
         hideSystemVolumeHUD()
+        bindApplicationLifeCycleNotifications()
+    }
+    
+    // MART: volume button
+    
+    func bindApplicationLifeCycleNotifications(){
+        let center = NSNotificationCenter.defaultCenter()
+        
+        center.addObserverForName(UIApplicationDidBecomeActiveNotification, object: nil, queue: nil, usingBlock: appActive)
+        center.addObserverForName(UIApplicationWillResignActiveNotification, object: nil, queue: nil, usingBlock: appResignActive)
+    }
+    
+    func appActive(note : NSNotification){
+        addVolumeChangeObserver()
+        systemBrightness = UIScreen.mainScreen().brightness
+        if brightnessState == .off {
+            UIScreen.mainScreen().brightness =  0
+        }
+    }
+    
+    func appResignActive(note : NSNotification){
+        removeVolumeChangeObserver()
+        UIScreen.mainScreen().brightness = systemBrightness
+        
+    }
+    
+    func addVolumeChangeObserver(){
+        systemOutputVolume = audioSession.outputVolume
+        do{
+            try audioSession.setActive(true)
+            try audioSession.setCategory(AVAudioSessionCategoryAmbient)
+            audioSession.addObserver(self,
+                                     forKeyPath: "outputVolume", options: .New, context: nil)
+        } catch {
+            print("error occurs at obeserver adding")
+        }
+    }
+    
+    func removeVolumeChangeObserver(){
+        do{
+            try audioSession.setActive(false)
+            audioSession.removeObserver(self, forKeyPath: "outputVolume")
+        } catch {
+            print("error occurs at obeserver removing")
+        }
     }
     
     
-    
-    // MART: volume button
     
     func setSystemOutputValue(value: Float){
         if let slide = volumeView.subviews[1] as? UISlider{

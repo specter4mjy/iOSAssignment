@@ -62,6 +62,7 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
         myPeripheral = peripheral
         central.connectPeripheral(peripheral, options: nil)
+        print(peripheral)
         central.stopScan()
     }
     
