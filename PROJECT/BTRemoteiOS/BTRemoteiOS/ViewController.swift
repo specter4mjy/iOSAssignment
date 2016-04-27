@@ -74,7 +74,7 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     
     var volumeView :MPVolumeView!
     
-    var restoreVolume = false
+    var restoreVolume = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -151,6 +151,15 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     
     func addVolumeChangeObserver(){
         systemOutputVolume = audioSession.outputVolume
+        switch systemOutputVolume {
+        case 0:
+            systemOutputVolume = 0.01
+        case 1:
+            systemOutputVolume = 0.99
+        default:
+            break
+        }
+        setSystemOutputValue(systemOutputVolume)
         do{
             try audioSession.setActive(true)
             try audioSession.setCategory(AVAudioSessionCategoryAmbient)
@@ -194,14 +203,10 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
             if let currentVolume = change?["new"] as? Float{
                 var key: VolumeKeys
                 
-                print("current: \(currentVolume) system: \(systemOutputVolume)")
-                if currentVolume == systemOutputVolume{
-                    key = currentVolume == 1 ? .up : .down
-                } else {
-                    key = currentVolume > systemOutputVolume ? .up : .down
-                    restoreVolume = true
-                    setSystemOutputValue(systemOutputVolume)
-                }
+                print("current: \(currentVolume) system: \(systemOutputVolume) ")
+                key = currentVolume > systemOutputVolume ? .up : .down
+                restoreVolume = true
+                setSystemOutputValue(systemOutputVolume)
                 
                 volumeButtonPressed(key)
             }
