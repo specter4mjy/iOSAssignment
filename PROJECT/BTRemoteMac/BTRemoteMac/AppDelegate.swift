@@ -27,17 +27,17 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
     var cursorPositionCharacteristic : CBMutableCharacteristic!
     var arrowKeyCharacteristic : CBMutableCharacteristic!
     
-    let screenHeight = NSScreen.screens()!.first!.frame.height
+    let screenHeight = NSScreen.screens.first!.frame.height
     
 
     @IBOutlet weak var statusMenu: NSMenu!
     @IBOutlet weak var connectStateMenuItem: NSMenuItem!
-    let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(NSVariableStatusItemLength)
+    let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
+    func applicationDidFinishLaunching(_ notification: Notification) {
         // Insert code here to initialize your application
         if let button = statusItem.button{
-            button.image = NSImage(named: "icon")
+            button.image = NSImage(named: NSImage.Name(rawValue: "icon"))
         }
         statusItem.menu = statusMenu
         
@@ -49,25 +49,24 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
     
     // MARK:  Central Manager
     
-    func centralManagerDidUpdateState(central: CBCentralManager) {
-        if central.state == .PoweredOn{
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        if central.state == .poweredOn{
             print("central power on")
-            myCentralManager.scanForPeripheralsWithServices([myServiceUUID], options: nil)
+            myCentralManager.scanForPeripherals(withServices: [myServiceUUID], options: nil)
         }
         else{
             print("central not power on")
         }
     }
     
-    func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         myPeripheral = peripheral
-        central.connectPeripheral(peripheral, options: nil)
+        central.connect(peripheral, options: nil)
         print(peripheral)
         central.stopScan()
     }
     
-    
-    func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("peripheral connected")
         peripheral.delegate = self
         peripheral.discoverServices([myServiceUUID])
@@ -77,61 +76,63 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
         
     }
     
-    func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         print("disconnected")
         connectStateMenuItem.title = "Scanning..."
-        myCentralManager.scanForPeripheralsWithServices([myServiceUUID], options: nil)
+        myCentralManager.scanForPeripherals(withServices: [myServiceUUID], options: nil)
     }
     
     // MARK:  Peripheral Delegates
     
-    func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         for service in peripheral.services! {
             print(service)
-            peripheral.discoverCharacteristics([cursorPosiotnUUID,arrowKeyUUID], forService: service)
+            peripheral.discoverCharacteristics([cursorPosiotnUUID,arrowKeyUUID], for: service)
         }
     }
     
-    func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         print("discovered Characteristic")
         for characteristic in service.characteristics!{
-            peripheral.setNotifyValue(true, forCharacteristic: characteristic)
+            peripheral.setNotifyValue(true, for: characteristic)
         }
     }
     
-    
-    func peripheral(peripheral: CBPeripheral, didUpdateNotificationStateForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
         if error != nil {
-            print( characteristic.UUID)
+            print( characteristic.uuid)
             print(" reading subscribed value has error \n erro is :")
-            print( error)
+            print( error!)
             print("error end")
         }
     }
     
-    func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         if let data = characteristic.value {
-            switch characteristic.UUID {
+            switch characteristic.uuid {
             case cursorPosiotnUUID:
                 var x : Double = 0
-                data.getBytes(&x, length: sizeof(Double))
+                var bytes = [UInt8](repeating:0, count: 2 * MemoryLayout<Double>.size)
+                data.copyBytes(to: &bytes, count: 2 * MemoryLayout<Double>.size)
+                let xData = Data(bytes: bytes[0..<MemoryLayout<Double>.size])
+                x = xData.withUnsafeBytes { $0.pointee }
                 var y : Double = 0
-                let range = NSRange(location: sizeof(Double), length: sizeof(Double))
-                data.getBytes(&y, range: range)
-                var cursorPoint = NSEvent.mouseLocation()
+                let yData = Data(bytes: bytes[MemoryLayout<Double>.size..<2 * MemoryLayout<Double>.size])
+                y = yData.withUnsafeBytes { $0.pointee }
+                var cursorPoint = NSEvent.mouseLocation
                 cursorPoint.y = screenHeight - cursorPoint.y
                 cursorPoint.x += CGFloat(x)
                 cursorPoint.y += CGFloat(y)
                 CGWarpMouseCursorPosition(cursorPoint)
                 print("x: \(x) y: \(y)")
             case arrowKeyUUID:
-                let text = String(data: data, encoding: NSUTF8StringEncoding)!
+                let text = String(data: data, encoding: String.Encoding.utf8)!
                 print(text)
                 switch text {
                 case "Previous":
-                    createKeyCode(.left)
+                    createKeyCode(key: .left)
                 case "Next":
-                    createKeyCode(.right)
+                    createKeyCode(key: .right)
                 default:
                     break
                 }
@@ -143,11 +144,12 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
     }
     
     func createKeyCode( key: VirtualKeys){
-        let source = CGEventSourceCreate(.HIDSystemState)
-        let rightPressed = CGEventCreateKeyboardEvent(source, key.rawValue, true)
-        CGEventPost(.CGHIDEventTap, rightPressed)
-        let rightReleased = CGEventCreateKeyboardEvent(source, key.rawValue, false)
-        CGEventPost(.CGHIDEventTap, rightReleased)
+        let source = CGEventSource(stateID: .hidSystemState)
+        let rightPressed = CGEvent(keyboardEventSource: source, virtualKey: key.rawValue, keyDown: true)
+        
+        rightPressed?.post(tap: .cghidEventTap)
+        let rightReleased = CGEvent(keyboardEventSource: source, virtualKey: key.rawValue, keyDown: false)
+        rightReleased?.post(tap: .cghidEventTap)
     }
     
     
@@ -156,7 +158,7 @@ class AppDelegate: NSObject, NSApplicationDelegate,CBCentralManagerDelegate,CBPe
     }
 
     @IBAction func quitClicked(sender: NSMenuItem) {
-        NSApplication.sharedApplication().terminate(self)
+        NSApplication.shared.terminate(self)
     }
 
 }
