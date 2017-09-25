@@ -20,9 +20,9 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     @IBOutlet weak var speedSlider: UISlider! {
         didSet{
             speedSlider.value = cursorSpeed
-            let rotateTransform = CGAffineTransformMakeRotation(CGFloat(-M_PI_2))
+            let rotateTransform = CGAffineTransform(rotationAngle: CGFloat(-Double.pi/2))
             speedSlider.transform = rotateTransform
-            speedSlider.setThumbImage(UIImage(named: "thumb"), forState: .Normal)
+            speedSlider.setThumbImage(UIImage(named: "thumb"), for: .normal)
         }
     }
     @IBOutlet weak var stackView: UIStackView!
@@ -34,7 +34,7 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         return views
     }()
     
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     // Bluetooth properties
     let myServiceUUID = CBUUID(string: "5CB39A21-3310-4A2E-B46E-8F6F3ABDA6CD")
@@ -57,16 +57,16 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     
     var cursorSpeed: Float  {
         get{
-            let defaults = NSUserDefaults.standardUserDefaults()
-            var cursorSpeedValue = defaults.floatForKey("cursorSpeed")
+            let defaults = UserDefaults.standard
+            var cursorSpeedValue = defaults.float(forKey: "cursorSpeed")
             if cursorSpeedValue == 0 {
                 cursorSpeedValue = 1
             }
             return cursorSpeedValue
         }
         set{
-            let defaults = NSUserDefaults.standardUserDefaults()
-            defaults.setFloat(newValue, forKey: "cursorSpeed")
+            let defaults = UserDefaults.standard
+            defaults.set(newValue, forKey: "cursorSpeed")
             speedSlider.value = newValue
         }
     }
@@ -96,7 +96,7 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         let currentTrackpadCenterX = trackpadView.center.x - trackpadCenterOffset
         let screenCenterX = view.center.x
         let distence = screenCenterX - currentTrackpadCenterX
-        moveSettingViewsXBy(distence)
+        moveSettingViewsXBy(x: distence)
     }
     func moveSettingViewsXBy(x: CGFloat){
         let targetTrackpadOriginX = trackpadView.frame.origin.x + x
@@ -117,11 +117,11 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         let screenCenterX = view.center.x
         let leftDistence = currentTrackpadOriginX
         let rightDistence = screenCenterX - currentTrackpadCenterX
-        UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .CurveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseInOut, animations:{
             if leftDistence > rightDistence {
-                self.moveSettingViewsXBy(rightDistence)
+                self.moveSettingViewsXBy(x: rightDistence)
             }else{
-                self.moveSettingViewsXBy(-leftDistence)
+                self.moveSettingViewsXBy(x: -leftDistence)
             }
             }, completion: nil)
     }
@@ -129,23 +129,23 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     // MART: volume button
     
     func bindApplicationLifeCycleNotifications(){
-        let center = NSNotificationCenter.defaultCenter()
+        let center = NotificationCenter.default
         
-        center.addObserverForName(UIApplicationDidBecomeActiveNotification, object: nil, queue: nil, usingBlock: appActive)
-        center.addObserverForName(UIApplicationWillResignActiveNotification, object: nil, queue: nil, usingBlock: appResignActive)
+        center.addObserver(forName: NSNotification.Name.UIApplicationDidBecomeActive, object: nil, queue: nil, using: appActive)
+        center.addObserver(forName: NSNotification.Name.UIApplicationWillResignActive, object: nil, queue: nil, using: appResignActive)
     }
     
-    func appActive(note : NSNotification){
+    func appActive(note : Notification){
         addVolumeChangeObserver()
-        systemBrightness = UIScreen.mainScreen().brightness
+        systemBrightness = UIScreen.main.brightness
         if brightnessState == .off {
-            UIScreen.mainScreen().brightness =  0
+            UIScreen.main.brightness =  0
         }
     }
     
-    func appResignActive(note : NSNotification){
+    func appResignActive(note : Notification){
         removeVolumeChangeObserver()
-        UIScreen.mainScreen().brightness = systemBrightness
+        UIScreen.main.brightness = systemBrightness
         
     }
     
@@ -159,12 +159,12 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         default:
             break
         }
-        setSystemOutputValue(systemOutputVolume)
+        setSystemOutputValue(value: systemOutputVolume)
         do{
             try audioSession.setActive(true)
             try audioSession.setCategory(AVAudioSessionCategoryAmbient)
             audioSession.addObserver(self,
-                                     forKeyPath: "outputVolume", options: .New, context: nil)
+                                     forKeyPath: "outputVolume", options: .new, context: nil)
         } catch {
             print("error occurs at obeserver adding")
         }
@@ -192,7 +192,8 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         view.addSubview(volumeView)
     }
     
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+ 
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "outputVolume"{
             
             if ( restoreVolume == true){
@@ -200,15 +201,15 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
                 restoreVolume = false
                 return
             }
-            if let currentVolume = change?["new"] as? Float{
+            if let currentVolume = change?[.newKey] as? Float{
                 var key: VolumeKeys
                 
                 print("current: \(currentVolume) system: \(systemOutputVolume) ")
                 key = currentVolume > systemOutputVolume ? .up : .down
                 restoreVolume = true
-                setSystemOutputValue(systemOutputVolume)
+                setSystemOutputValue(value: systemOutputVolume)
                 
-                volumeButtonPressed(key)
+                volumeButtonPressed(key: key)
             }
         }
     }
@@ -216,8 +217,8 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     func volumeButtonPressed(key : VolumeKeys){
         let keyString = key == .up ? "Previous" : "Next"
         print( keyString)
-        let data = keyString.dataUsingEncoding(NSUTF8StringEncoding)
-        myPeripheralManager.updateValue(data!, forCharacteristic: arrowKeyCharacteristic, onSubscribedCentrals: nil)
+        let data = keyString.data(using: String.Encoding.utf8)
+        myPeripheralManager.updateValue(data!, for: arrowKeyCharacteristic, onSubscribedCentrals: nil)
     }
     
     
@@ -226,15 +227,15 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         myPeripheralManager = CBPeripheralManager(delegate: self, queue: nil)
     }
     
-    func peripheralManagerDidUpdateState(peripheral: CBPeripheralManager) {
-        if peripheral.state == .PoweredOn{
+    func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
+        if peripheral.state == .poweredOn{
             print("peripheral power on")
-            cursorPositionCharacteristic = CBMutableCharacteristic(type: cursorPositionUUID, properties: [.Read,.Notify], value: nil, permissions: .Readable)
-            arrowKeyCharacteristic = CBMutableCharacteristic(type: arrowKeyUUID, properties: [.Read,.Notify], value: nil, permissions: .Readable)
+            cursorPositionCharacteristic = CBMutableCharacteristic(type: cursorPositionUUID, properties: [.read,.notify], value: nil, permissions: .readable)
+            arrowKeyCharacteristic = CBMutableCharacteristic(type: arrowKeyUUID, properties: [.read,.notify], value: nil, permissions: .readable)
             let myService = CBMutableService(type: myServiceUUID, primary:true)
             myService.characteristics = [cursorPositionCharacteristic, arrowKeyCharacteristic]
-            myPeripheralManager.addService(myService)
-            let advertisingData : [ String : AnyObject] = [
+            myPeripheralManager.add(myService)
+            let advertisingData : [ String : [AnyObject]] = [
                 CBAdvertisementDataServiceUUIDsKey : [myServiceUUID]
             ]
             myPeripheralManager.startAdvertising(advertisingData)
@@ -248,14 +249,15 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
         print("add service")
     }
     
-    func peripheralManagerDidStartAdvertising(peripheral: CBPeripheralManager, error: NSError?) {
+    func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
         if error == nil {
             print("start Advertising")
         }
         else {
-            print(error)
+            print(error!)
         }
     }
+    
     
     func peripheralManager(peripheral: CBPeripheralManager, central: CBCentral, didSubscribeToCharacteristic characteristic: CBCharacteristic) {
         print(" did subscribe characteristic")
@@ -264,15 +266,15 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     
     @IBAction func panGestureHandler(sender: UIPanGestureRecognizer) {
         switch sender.state {
-        case .Began:
-            gestureFingerNumber = sender.numberOfTouches()
-        case .Changed:
+        case .began:
+            gestureFingerNumber = sender.numberOfTouches
+        case .changed:
             if gestureFingerNumber == 1{
-                gestureForCursorPosition(sender)
+                gestureForCursorPosition(sender: sender)
             }else{
-                gestureForSettingViews(sender)
+                gestureForSettingViews(sender: sender)
             }
-        case .Ended:
+        case .ended:
             if gestureFingerNumber != 1 {
                 rearrangeSettingViewsAfterPanGesture()
             }
@@ -282,33 +284,34 @@ class ViewController: UIViewController,CBPeripheralManagerDelegate {
     }
     
     func gestureForSettingViews(sender: UIPanGestureRecognizer){
-        let point = sender.translationInView(view)
-        sender.setTranslation(CGPointZero, inView: view)
-        moveSettingViewsXBy(point.x)
+        let point = sender.translation(in: view)
+        sender.setTranslation(CGPoint.zero, in: view)
+        moveSettingViewsXBy(x: point.x)
     }
     
     func gestureForCursorPosition(sender: UIPanGestureRecognizer){
-        let point = sender.translationInView(trackpadView)
-        sender.setTranslation(CGPointZero, inView: trackpadView)
+        let point = sender.translation(in: trackpadView)
+        sender.setTranslation(CGPoint.zero, in: trackpadView)
         var xOfPoint = Double(point.x) * Double(cursorSpeed)
         var yOfPoint = Double(point.y) * Double(cursorSpeed)
         let cursorData = NSMutableData()
-        cursorData.appendBytes(&xOfPoint, length: sizeof(Double))
-        cursorData.appendBytes(&yOfPoint, length: sizeof(Double))
-        myPeripheralManager.updateValue(cursorData, forCharacteristic: cursorPositionCharacteristic, onSubscribedCentrals: nil)
+        cursorData.append(&xOfPoint, length: MemoryLayout<Double>.size)
+        cursorData.append(&yOfPoint, length: MemoryLayout<Double>.size)
+        myPeripheralManager.updateValue(cursorData as Data, for: cursorPositionCharacteristic, onSubscribedCentrals: nil)
         
     }
     @IBAction func brightnessPressed() {
         switch brightnessState {
         case .off:
             brightnessState = .on
-            UIScreen.mainScreen().brightness = systemBrightness
+            UIScreen.main.brightness = systemBrightness
         case .on:
             brightnessState = .off
-            UIScreen.mainScreen().brightness = 0
+            UIScreen.main.brightness = 0
         }
     }
-    @IBAction func speedChanged(sender: UISlider) {
+
+    @IBAction func speedChanged(_ sender: UISlider) {
         cursorSpeed = sender.value
     }
 }
